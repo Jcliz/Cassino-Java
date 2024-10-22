@@ -1,2 +1,2 @@
-public class BlackJack extends Jogo{
+public class BlackJack extends Baralho{
 }
