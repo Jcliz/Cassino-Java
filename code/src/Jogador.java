@@ -1,2 +1,2 @@
-public class Jogador {
+public class Jogador extends Usuario{
 }

@@ -1,2 +1,2 @@
-public class CacaNiquel {
+public class CacaNiquel extends Jogo {
 }

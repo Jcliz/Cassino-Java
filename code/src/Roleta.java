@@ -1,2 +1,2 @@
-public class Roleta {
+public class Roleta extends Jogo{
 }
