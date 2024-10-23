@@ -1,3 +1,5 @@
+package Entidades;
+
 public abstract class Bot extends Jogo {
     public Bot() {
         super();

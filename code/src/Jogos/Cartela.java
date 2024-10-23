@@ -1,9 +1,11 @@
+package Jogos;
+
 import java.util.Random;
 import java.util.Set;
 import java.util.Arrays;
 import java.util.HashSet;
 
-public class Cartela extends Bingo{
+public class Cartela extends Bingo {
     protected String[][] cartela;
     protected String nome;
 
@@ -37,7 +39,7 @@ public class Cartela extends Bingo{
     }
 
     public void imprimirCartela() {
-        System.out.println("Cartela de " + nome + ":");
+        System.out.println("Jogos.Cartela de " + nome + ":");
         for (String[] linha : cartela) {
             for (String numero : linha) {
                 System.out.print(numero + "\t");
