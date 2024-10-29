@@ -9,8 +9,8 @@ public class Cartela extends Bingo {
     protected String[][] cartela;
     protected String nome;
 
-    public Cartela(String nome) {
-        super();
+    public Cartela(int numeroJogadores, boolean estadoDoJogo, String nome) {
+        super(numeroJogadores, estadoDoJogo);
         this.nome = nome;
         this.cartela = gerarCartela();
     }

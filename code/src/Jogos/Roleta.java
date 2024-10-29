@@ -11,6 +11,10 @@ public class Roleta extends Jogo {
     private int numeroRandom; // Número randomico
     private int corRandom; // Cor randomica
 
+    public Roleta (int numeroJogadores, boolean estadoDoJogo) {
+        super(numeroJogadores, estadoDoJogo);
+    }
+
     public double Apostar(Scanner leitor, double valorAposta){
         Random r = new Random();
         this.numeroRandom = r.nextInt(35) + 1;
@@ -35,7 +39,7 @@ public class Roleta extends Jogo {
             //TRATAMENTO DE ERROS
             if (apostaTentativa % 2 == 0) {
                 System.out.println("Aposta válida!");
-                apostaTentativa = this.aposta;
+                this.aposta = apostaTentativa;
             } else {
                 System.out.println("Valor inválido!");
             }
@@ -48,7 +52,7 @@ public class Roleta extends Jogo {
             //TRATAMENTO DE ERROS
             if (apostaTentativa % 3 == 0) {
                 System.out.println("Aposta válida!");
-                apostaTentativa = this.aposta;
+                this.aposta = apostaTentativa;
             } else {
                 System.out.println("Valor inválido!");
             }
@@ -83,5 +87,13 @@ public class Roleta extends Jogo {
             System.out.println("Ganhou 1.5x o valor: R$" + resultado);
         }
         return resultado;
+    }
+
+    public String imprimir (double valorApostado) {
+        return "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n" +
+                "Valor apostado: " + valorApostado + "\n" +
+                "Número e cor apostados: " + aposta + ", " + corStr + "\n" +
+                "Resultado (em créditos): " + resultado + "\n" +
+                "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n";
     }
 }

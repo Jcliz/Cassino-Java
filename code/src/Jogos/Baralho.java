@@ -7,7 +7,8 @@ import java.util.List;
 public abstract class Baralho extends Jogo {
     private List<Carta> cartas;
 
-    public Baralho() {
+    public Baralho(int numeroJogadores, boolean estadoDoJogo) {
+        super(numeroJogadores, estadoDoJogo);
         cartas = new ArrayList<>();
         for (Naipe naipe : Naipe.values()) {
             for (Valor valor : Valor.values()) {

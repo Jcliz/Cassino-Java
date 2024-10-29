@@ -10,13 +10,12 @@ import java.util.Set;
 public class Bingo extends Jogo {
     private Set<Integer> numerosSorteados;
     private List<Cartela> jogadores;
+    private double resultado;
 
-    public Bingo() {
-        super();
+    public Bingo(int numeroJogadores, boolean estadoDoJogo) {
+        super(numeroJogadores, estadoDoJogo);
         this.numerosSorteados = new HashSet<>();
         this.jogadores = new ArrayList<>();
-        this.numeroDeJogadores = 0;
-        this.estadoDoJogo = false;
     }
 
     public void sortearNumero() {
@@ -43,7 +42,7 @@ public class Bingo extends Jogo {
 
     public void jogar(Scanner scanner) {
         iniciarJogo();
-        while (estadoDoJogo) {
+        while (super.getEstado()) {
             System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
             System.out.println("Sortear próximo número? (s/n)");
             String resposta = scanner.nextLine();
@@ -64,5 +63,14 @@ public class Bingo extends Jogo {
                 finalizarJogo();
             }
         }
+    }
+
+    public String imprimir (double valorApostado) {
+        return "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n" +
+                "Valor Apostado: " + valorApostado + "\n" +
+                "Jogadores: " + jogadores + "\n" +
+                "Numeros sorteados: " + numerosSorteados + "\n" +
+                "Resultado (em créditos): " + resultado + "\n" +
+                "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n";
     }
 }
