@@ -15,53 +15,64 @@ public class Roleta extends Jogo {
         super(numeroJogadores, estadoDoJogo);
     }
 
-    public double Apostar(Scanner leitor, double valorAposta){
+    public double jogar(Scanner leitor, double valorAposta){
         Random r = new Random();
-        this.numeroRandom = r.nextInt(35) + 1;
-        this.corRandom = r.nextInt(1) + 1;  // 1 == Vermelho;  2 == Preto;
+        iniciarJogo();
+        resultado = 0;
 
-        System.out.print("""
-                +-+-+-+-+-+-+-+-+ ROLETA +-+-+-+-+-+-+-+-+
-                
-                Opções para aposta:
-                [1] - Vermelho
-                [2] - Preto
-                """);
-        this.cor = leitor.nextInt();
+        while (super.getEstado()) {
+            System.out.println("""
+                    +-+-+-+-+-+-+-+-+ ROLETA +-+-+-+-+-+-+-+-+
+                    Opções:
+                    
+                    [1] - Começar o jogo
+                    
+                    [0] - Voltar ao início""");
 
-        int apostaTentativa; // Numéro apostado antes da verificação
+            sortearNumeros(r);
 
-        if (this.cor == 1) {
-            this.corStr = "VERMELHO";
-            System.out.println("Escolha um número par de 0 a 36:");
-            apostaTentativa = leitor.nextInt();
+            System.out.print("""
+                    Opções para aposta:
+                    [1] - Vermelho
+                    [2] - Preto
+                    """);
+            this.cor = leitor.nextInt();
 
-            //TRATAMENTO DE ERROS
-            if (apostaTentativa % 2 == 0) {
-                System.out.println("Aposta válida!");
-                this.aposta = apostaTentativa;
+            int apostaTentativa; // Numéro apostado antes da verificação
+
+            if (this.cor == 1) {
+                this.corStr = "VERMELHO";
+                System.out.println("Escolha um número par de 0 a 36:");
+                apostaTentativa = leitor.nextInt();
+
+                //TRATAMENTO DE ERROS
+                if (apostaTentativa % 2 == 0) {
+                    System.out.println("Aposta válida!");
+                    this.aposta = apostaTentativa;
+                } else {
+                    System.out.println("Valor inválido!");
+                }
+
+            } else if (this.cor == 2) {
+                this.corStr = "PRETO";
+                System.out.println("Escolha um número ímpar de 0 a 36:");
+                apostaTentativa = leitor.nextInt();
+
+                //TRATAMENTO DE ERROS
+                if (apostaTentativa % 3 == 0) {
+                    System.out.println("Aposta válida!");
+                    this.aposta = apostaTentativa;
+                } else {
+                    System.out.println("Valor inválido!");
+                }
+
             } else {
-                System.out.println("Valor inválido!");
+                //TRATAMENTO DE ERRO
+                System.out.println("Opção inválida!");
             }
-
-        } else if (this.cor == 2) {
-            this.corStr = "PRETO";
-            System.out.println("Escolha um número ímpar de 0 a 36:");
-            apostaTentativa = leitor.nextInt();
-
-            //TRATAMENTO DE ERROS
-            if (apostaTentativa % 3 == 0) {
-                System.out.println("Aposta válida!");
-                this.aposta = apostaTentativa;
-            } else {
-                System.out.println("Valor inválido!");
-            }
-
-        } else {
-            //TRATAMENTO DE ERRO
-            System.out.println("Opção inválida!");
         }
-        return this.verificacaoResultados(valorAposta);
+        finalizarJogo();
+        return verificacaoResultados(valorAposta);
     }
 
     public double verificacaoResultados (double valorAposta) {
@@ -82,7 +93,7 @@ public class Roleta extends Jogo {
             System.out.println("Ganhou 3x o valor: R$" + resultado);
         }
         // Caso em que a cor é acertada
-        else if (cor == corRandom) {
+        else {
             resultado = valorAposta * 1.5; //Se a cor apostada for igual à sorteada, ganha o valor da aposta * 1.5
             System.out.println("Ganhou 1.5x o valor: R$" + resultado);
         }
@@ -95,5 +106,10 @@ public class Roleta extends Jogo {
                 "Número e cor apostados: " + aposta + ", " + corStr + "\n" +
                 "Resultado (em créditos): " + resultado + "\n" +
                 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n";
+    }
+
+    public void sortearNumeros (Random r) {
+        this.numeroRandom = r.nextInt(35) + 1;
+        this.corRandom = r.nextInt(1) + 1;  // 1 == Vermelho;  2 == Preto;
     }
 }
