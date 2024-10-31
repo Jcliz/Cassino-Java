@@ -8,4 +8,8 @@ public abstract class Usuario {
         this.nome = nome;
         this.dataNascimento = dataNascimento;
     }
+
+    protected String getNome() {
+        return nome;
+    }
 }
