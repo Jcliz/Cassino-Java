@@ -1,20 +1,32 @@
 package Entidades;
 
-import Jogos.Baralho;
+import Jogos.Carta;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Dealer extends Bot {
+    private List<Carta> mao;
+
     public Dealer() {
         super();
+        this.mao = new ArrayList<>();
     }
 
     @Override
     public void executarAcao() {
-        // Implementar lógica do dealer para executar uma ação
-        System.out.println("Entidades.Dealer está executando uma ação.");
+        // Implement the dealer's action logic here
+        System.out.println("Dealer está executando uma ação.");
     }
 
-    public void distribuirCartas(Baralho baralho) {
-        // Implementar lógica do dealer para distribuir cartas
-        System.out.println("Entidades.Dealer está distribuindo cartas.");
+    public void receberCarta(Carta carta) {
+        mao.add(carta);
+    }
+
+    public List<Carta> getMao() {
+        return mao;
+    }
+
+    public String getNome() {
+        return "Dealer";
     }
 }

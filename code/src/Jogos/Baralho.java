@@ -4,80 +4,30 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class Baralho extends Jogo {
-    private List<Carta> cartas;
+public class Baralho extends Jogo {
+    protected List<Carta> cartas; // Baralho do truco
 
-    public Baralho(int numeroJogadores, boolean estadoDoJogo) {
-        super(numeroJogadores, estadoDoJogo);
-        cartas = new ArrayList<>();
-        for (Naipe naipe : Naipe.values()) {
-            for (Valor valor : Valor.values()) {
-                cartas.add(new Carta(naipe, valor));
+    public Baralho() {
+        super(1, false); // Não consegui fazer funcionar sem isso, culpa de vcs
+        cartas = new ArrayList<>(); // Inicializa a lista de cartas
+        String[] naipes = {"Copas", "Espadas", "Ouros", "Paus"}; // Define os naipes das cartas
+        String[] valores = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"}; // Define os valores das cartas
+
+        // Loop para criar todas as combinações de naipes e valores
+        for (String naipe : naipes) { // Para cada naipe (começa com "Copas") que vai de 0 a 3 (4 naipes)
+            for (String valor : valores) { // Para cada valor (começa com "A") que vai de 0 a 12 (13 valores)
+                cartas.add(new Carta(naipe, valor)); // Adiciona uma nova carta à lista (começa com "A de Copas")
             }
         }
-        embaralhar();
-    }
-
-    public void embaralhar() {
-        Collections.shuffle(cartas);
+        Collections.shuffle(cartas);// Embaralha as cartas
     }
 
     public Carta distribuirCarta() {
-        if (cartas.isEmpty()) {
-            throw new IllegalStateException("O baralho está vazio");
-        }
-        return cartas.remove(cartas.size() - 1);
+        return cartas.remove(0); // Remove a primeira carta do baralho e a retorna no "receberCarta"
     }
 
-    public int cartasRestantes() {
-        return cartas.size();
-    }
-
-    public enum Naipe {
-        COPAS, OUROS, ESPADAS, PAUS;
-    }
-
-    public enum Valor {
-        DOIS(2), TRES(3), QUATRO(4), CINCO(5), SEIS(6), SETE(7), OITO(8), NOVE(9), DEZ(10), VALETE(10), DAMA(10), REI(10), AS(1);
-
-        private final int valor;
-
-        Valor(int valor) {
-            this.valor = valor;
-        }
-
-        public int getValor() {
-            return valor;
-        }
-    }
-
-    public class Carta {
-        private final Naipe naipe;
-        private final Valor valor;
-
-        public Carta(Naipe naipe, Valor valor) {
-            this.naipe = naipe;
-            this.valor = valor;
-        }
-
-        public Naipe getNaipe() {
-            return naipe;
-        }
-
-        public Valor getValor() {
-            return valor;
-        }
-
-        public int getValorParaBlackjack(boolean asComoOnze) {
-            if (valor == Valor.AS) {
-                return asComoOnze ? 11 : 1;
-            }
-            return valor.getValor();
-        }
-
-        @Override
-        public String toString() {
-            return valor + " de " + naipe;
-        }
+    @Override
+    public String imprimir(double valorApostado) {
+        return "Baralho com " + cartas.size() + " cartas restantes."; // Retorna a quantidade de cartas restantes no baralho
     }
 }
