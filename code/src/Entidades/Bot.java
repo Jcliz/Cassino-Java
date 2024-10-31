@@ -1,8 +1,8 @@
 package Entidades;
 
-public abstract class Bot extends Jogo {
+public abstract class Bot {
     public Bot() {
-        super();
+
     }
 
     public abstract void executarAcao();
