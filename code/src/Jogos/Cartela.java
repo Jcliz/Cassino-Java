@@ -8,11 +8,13 @@ import java.util.HashSet;
 public class Cartela extends Bingo {
     protected String[][] cartela;
     protected String nome;
+    protected double valor;
 
-    public Cartela(int numeroJogadores, boolean estadoDoJogo, String nome) {
-        super(numeroJogadores, estadoDoJogo);
+    public Cartela(boolean estadoDoJogo, String nome, double valor) {
+        super(estadoDoJogo);
         this.nome = nome;
         this.cartela = gerarCartela();
+        this.valor = valor;
     }
 
     protected String[][] gerarCartela() {
@@ -39,7 +41,7 @@ public class Cartela extends Bingo {
     }
 
     public void imprimirCartela() {
-        System.out.println("Jogos.Cartela de " + nome + ":");
+        System.out.println("\n" + "Cartela de " + nome + ":");
         for (String[] linha : cartela) {
             for (String numero : linha) {
                 System.out.print(numero + "\t");
@@ -70,6 +72,7 @@ public class Cartela extends Bingo {
                 }
             }
             if (linhaCompleta) {
+                valor *= 2;
                 return true;
             }
         }
@@ -82,6 +85,7 @@ public class Cartela extends Bingo {
                 }
             }
             if (colunaCompleta) {
+                valor *= 2;
                 return true;
             }
         }
@@ -90,5 +94,13 @@ public class Cartela extends Bingo {
 
     public String getNome() {
         return nome;
+    }
+
+    public double getResultado() {
+        return valor;
+    }
+
+    public void setResultado(double valor) {
+        this.valor = valor;
     }
 }

@@ -12,8 +12,8 @@ public class Bingo extends Jogo {
     private List<Cartela> jogadores;
     private double resultado;
 
-    public Bingo(int numeroJogadores, boolean estadoDoJogo) {
-        super(numeroJogadores, estadoDoJogo);
+    public Bingo(boolean estadoJogo) {
+        super(estadoJogo);
         this.numerosSorteados = new HashSet<>();
         this.jogadores = new ArrayList<>();
     }
@@ -51,12 +51,23 @@ public class Bingo extends Jogo {
                 for (Cartela cartela : jogadores) {
                     cartela.imprimirCartela();
                 }
-                for (Cartela cartela : jogadores) {
+
+                //Não foi utilizado o for each, pois, a variável i será utilizada para verificação
+                for (int i = 0; i < jogadores.size(); i++) {
+                    Cartela cartela = jogadores.get(i);
+
                     if (verificarVencedor(cartela)) {
+                        if (i == 0) {
+                            this.resultado = cartela.getResultado();
+                        }
+
                         System.out.println(cartela.getNome() + " venceu!");
+                        System.out.println("Valor ganho pelo jogador " + cartela.getNome() + ":" + cartela.getResultado());
                         cartela.imprimirCartela();
                         finalizarJogo();
                         break;
+                    } else {
+                        cartela.setResultado(0);
                     }
                 }
             } else {
@@ -70,7 +81,7 @@ public class Bingo extends Jogo {
                 "Valor Apostado: " + valorApostado + "\n" +
                 "Jogadores: " + jogadores + "\n" +
                 "Numeros sorteados: " + numerosSorteados + "\n" +
-                "Resultado (em créditos): " + resultado + "\n" +
+                "Resultado do jogador 1 (em créditos): " + resultado + "\n" +
                 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n";
     }
 }

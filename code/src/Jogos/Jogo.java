@@ -9,19 +9,23 @@ public abstract class Jogo {
         this.estadoDoJogo = estadoDoJogo;
     }
 
+    public Jogo (boolean estadoDoJogo) {
+        this.estadoDoJogo = estadoDoJogo;
+    }
+
     public void iniciarJogo() {
         estadoDoJogo = true;
-        System.out.println("Jogos.Jogo iniciado.");
+        System.out.println("Jogo iniciado.");
     }
 
     public void finalizarJogo() {
         estadoDoJogo = false;
-        System.out.println("Jogos.Jogo finalizado.");
+        System.out.println("Jogo finalizado.");
     }
 
     public void adicionarJogador() {
         numeroDeJogadores++;
-        System.out.println("Package_Entidade.Jogador adicionado. Total de jogadores: " + numeroDeJogadores);
+        System.out.println("Jogador adicionado. Total de jogadores: " + numeroDeJogadores);
     }
 
     public abstract String imprimir(double valorApostado);
