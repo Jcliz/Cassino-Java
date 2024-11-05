@@ -131,6 +131,11 @@ public class Roleta extends Jogo {
         this.corRandom = r.nextInt(1) + 1;  // 1 == Vermelho;  2 == Preto;
     }
 
+    public void finalizarJogo() {
+        super.setEstado(false);
+        System.out.println("Terminando sua jogada na roleta!");
+    }
+
     public void iniciarJogo() {
         super.setEstado(true);
         System.out.println("Vamos começar o jogo! Boa sorte.");

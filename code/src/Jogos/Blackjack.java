@@ -17,9 +17,9 @@ public class Blackjack extends Jogo {
         dealer = new Dealer(); // Inicializa o dealer
     }
 
-    @Override
-    public void iniciarJogo() {
+    public void jogar() {
         Scanner scanner = new Scanner(System.in);
+        iniciarJogo();
 
         // Distribui duas cartas para cada jogador
         jogador.receberCarta(baralho.distribuirCarta()); // em baralho.distribuirCarta() a carta é removida da lista de cartas (baralho) qu e esta em "Baralho"
@@ -30,8 +30,10 @@ public class Blackjack extends Jogo {
         System.out.println("Cartas do jogador: " + jogador.getMao()); // Mostra as cartas do jogador
         System.out.println("Cartas do dealer: " + dealer.getMao().getFirst() + " e [carta oculta]"); // Mostra a primeira carta do dealer
 
+
+
         // Loop para as ações do jogador
-        while (true) {
+        while (super.getEstado()) {
             System.out.println("Escolha uma ação: 1. Pedir carta  2. Parar");
             int escolha = scanner.nextInt();
 
@@ -67,6 +69,16 @@ public class Blackjack extends Jogo {
         } else {
             System.out.println("Empate!"); // Se for empate
         }
+    }
+
+    public void iniciarJogo() {
+        super.setEstado(true);
+        System.out.println("Com as cartas embaralhadas, iniciaremos o jogo! Boa sorte.");
+    }
+
+    public void finalizarJogo() {
+        super.setEstado(false);
+        System.out.println("Finalizando a jogatina no BlackJack. Obrigado pela preferência!");
     }
 
     @Override

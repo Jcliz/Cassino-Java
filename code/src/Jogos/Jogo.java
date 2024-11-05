@@ -15,10 +15,7 @@ public abstract class Jogo {
 
     public abstract void iniciarJogo();
 
-    public void finalizarJogo() {
-        estadoDoJogo = false;
-        System.out.println("Jogo finalizado.");
-    }
+    public abstract void finalizarJogo();
 
     public void adicionarJogador() {
         numeroDeJogadores++;

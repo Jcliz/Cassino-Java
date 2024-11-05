@@ -77,6 +77,12 @@ public class Bingo extends Jogo {
     }
 
     @Override
+    public void finalizarJogo() {
+        super.setEstado(false);
+        System.out.println("Partida finalizada! Obrigado por jogar conosco.");
+    }
+
+    @Override
     public void iniciarJogo () {
         super.setEstado(true);
         System.out.println("Bingo iniciado, preparem as suas cartelas!");

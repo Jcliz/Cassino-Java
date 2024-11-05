@@ -86,6 +86,12 @@ public class CacaNiquel extends Jogo {
     //FAZER LAÇO DE ITERAÇÃO EM RELAÇÃO A REPETIÇÕES NA OPERAÇÃO DE RODAR O CAÇA NÍQUEL
 
     @Override
+    public void finalizarJogo() {
+        super.setEstado(false);
+        System.out.println("Finalizando sua jogatina na máquina de Caça Níqueis!");
+    }
+
+    @Override
     public void iniciarJogo() {
         super.setEstado(true);
         System.out.println("Iniciando o caça níquel!");

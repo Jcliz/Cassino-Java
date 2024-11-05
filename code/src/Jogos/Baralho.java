@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Baralho extends Jogo {
+public class Baralho extends Blackjack {
     protected List<Carta> cartas; // Baralho do truco
 
     public Baralho() {
-        super(1, false); // Não consegui fazer funcionar sem isso, culpa de vcs
+        super();
         cartas = new ArrayList<>(); // Inicializa a lista de cartas
         String[] naipes = {"Copas", "Espadas", "Ouros", "Paus"}; // Define os naipes das cartas
         String[] valores = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"}; // Define os valores das cartas
