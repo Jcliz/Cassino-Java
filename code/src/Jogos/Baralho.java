@@ -23,7 +23,7 @@ public class Baralho extends Jogo {
     }
 
     public Carta distribuirCarta() {
-        return cartas.remove(0); // Remove a primeira carta do baralho e a retorna no "receberCarta"
+        return cartas.removeFirst(); // Remove a primeira carta do baralho e a retorna no "receberCarta"
     }
 
     @Override

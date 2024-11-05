@@ -9,11 +9,13 @@ public class CacaNiquel extends Jogo {
     private ArrayList<String> simbolos = new ArrayList<>(Arrays.asList(
             "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Diamante", "Diamante", "Diamante", "Diamante", "Diamante", "Lancer", "Lancer", "Lancer", "Lancer", "Lancer", "Lancer", "Lancer", "Lancer", "Lancer", "Lancer"
     ));
-
-
     private double saldo;
 
-    public void sortearSimbolos() {
+    public CacaNiquel(int numeroJogadores, boolean estadoDoJogo) {
+        super(numeroJogadores, estadoDoJogo);
+    }
+
+    public void sortearSimbolos(double aposta) {
         Collections.shuffle(simbolos);
         String simbolo1 = simbolos.get(0);
         String simbolo2 = simbolos.get(1);
@@ -76,20 +78,31 @@ public class CacaNiquel extends Jogo {
                     System.out.println("Três símbolos iguais, mas não reconhecidos.");
             }
 
+        } else {
+            System.out.println("A sequência não foi acertada. Boa sorte na próxima!");
         }
+    }
+
+    //FAZER LAÇO DE ITERAÇÃO EM RELAÇÃO A REPETIÇÕES NA OPERAÇÃO DE RODAR O CAÇA NÍQUEL
+
+    @Override
+    public void iniciarJogo() {
+        super.setEstado(true);
+        System.out.println("Iniciando o caça níquel!");
     }
 
     public double getSaldo() {
         return saldo;
     }
 
-    public CacaNiquel(int numeroJogadores, boolean estadoDoJogo) {
-        super(numeroJogadores, estadoDoJogo);
+    public String imprimir (double valorApostado) {
+        return "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n" +
+                "Valor Apostado: " + valorApostado + "\n" +
+                "Resultado: " + saldo + "\n" +
+                "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n";
     }
 
-    public String imprimir (double valorApostado) {
-        return "";
-    }
+
 }
 
 

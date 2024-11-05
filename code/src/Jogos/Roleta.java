@@ -126,16 +126,21 @@ public class Roleta extends Jogo {
         return resultado;
     }
 
+    public void sortearNumeros (Random r) {
+        this.numeroRandom = r.nextInt(35) + 1;
+        this.corRandom = r.nextInt(1) + 1;  // 1 == Vermelho;  2 == Preto;
+    }
+
+    public void iniciarJogo() {
+        super.setEstado(true);
+        System.out.println("Vamos começar o jogo! Boa sorte.");
+    }
+
     public String imprimir (double valorApostado) {
         return "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n" +
                 "Valor apostado: " + valorApostado + "\n" +
                 "Número e cor apostados: " + aposta + ", " + corStr + "\n" +
                 "Resultado (em créditos): " + resultado + "\n" +
                 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n";
-    }
-
-    public void sortearNumeros (Random r) {
-        this.numeroRandom = r.nextInt(35) + 1;
-        this.corRandom = r.nextInt(1) + 1;  // 1 == Vermelho;  2 == Preto;
     }
 }

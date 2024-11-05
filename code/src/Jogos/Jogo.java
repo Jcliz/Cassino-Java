@@ -13,10 +13,7 @@ public abstract class Jogo {
         this.estadoDoJogo = estadoDoJogo;
     }
 
-    public void iniciarJogo() {
-        estadoDoJogo = true;
-        System.out.println("Jogo iniciado.");
-    }
+    public abstract void iniciarJogo();
 
     public void finalizarJogo() {
         estadoDoJogo = false;
@@ -32,5 +29,9 @@ public abstract class Jogo {
 
     public boolean getEstado () {
         return estadoDoJogo;
+    }
+
+    public void setEstado(boolean estadoDoJogo) {
+        this.estadoDoJogo = estadoDoJogo;
     }
 }

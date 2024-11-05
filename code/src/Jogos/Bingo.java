@@ -76,6 +76,12 @@ public class Bingo extends Jogo {
         }
     }
 
+    @Override
+    public void iniciarJogo () {
+        super.setEstado(true);
+        System.out.println("Bingo iniciado, preparem as suas cartelas!");
+    }
+
     public String imprimir (double valorApostado) {
         return "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n" +
                 "Valor Apostado: " + valorApostado + "\n" +

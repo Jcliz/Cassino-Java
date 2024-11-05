@@ -1,11 +1,11 @@
 package Jogos;
 
-public class Carta extends Jogo {
+public class Carta extends Baralho {
     protected String naipe;
     protected String valor;
 
     public Carta(String naipe, String valor) {
-        super(1, false);
+        super();
         this.naipe = naipe; // Define o naipe da carta para imprimir
         this.valor = valor; // Define o valor da carta para imprimir
     }

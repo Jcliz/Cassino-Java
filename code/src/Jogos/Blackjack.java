@@ -28,7 +28,7 @@ public class Blackjack extends Jogo {
         dealer.receberCarta(baralho.distribuirCarta());
 
         System.out.println("Cartas do jogador: " + jogador.getMao()); // Mostra as cartas do jogador
-        System.out.println("Cartas do dealer: " + dealer.getMao().get(0) + " e [carta oculta]"); // Mostra a primeira carta do dealer
+        System.out.println("Cartas do dealer: " + dealer.getMao().getFirst() + " e [carta oculta]"); // Mostra a primeira carta do dealer
 
         // Loop para as ações do jogador
         while (true) {
@@ -71,7 +71,10 @@ public class Blackjack extends Jogo {
 
     @Override
     public String imprimir(double valorApostado) { // Método para imprimir o valor apostado
-        return "Valor apostado: " + valorApostado; // Retorna o valor apostado
+        return "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n" +
+                "Valor Apostado: " + valorApostado + "\n" +
+                "Jogador: " + jogador.getNome() + "\n" +
+                "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n"; // Retorna o valor apostado
     }
 
     private int calcularPontuacao(List<Carta> mao) { // Método para calcular a pontuação da mão
