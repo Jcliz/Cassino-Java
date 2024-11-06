@@ -59,10 +59,8 @@ public class Roleta extends Jogo {
                                 apostaTentativa = leitor.nextInt();
                                 verificarValorValidoImpar(apostaTentativa);
                             } else {
-                                System.out.println("Opção inválida!");
+                                throw new ValorInvalidoException("Opção inválida! Tente novamente!");
                             }
-                        } catch (ValorInvalidoException e) {
-                            System.out.println(e.getMessage());
                         } catch (InputMismatchException e) {
                             System.out.println("Entrada inválida! Por favor, insira um número inteiro.");
                         }

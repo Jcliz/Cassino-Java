@@ -1,8 +1,10 @@
 package Jogos;
 
+import Utilidades.ValorInvalidoException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Scanner;
 
 public class CacaNiquel extends Jogo {
 
@@ -10,12 +12,15 @@ public class CacaNiquel extends Jogo {
             "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Cereja", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Limão", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Sino", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Joker", "Diamante", "Diamante", "Diamante", "Diamante", "Diamante", "Lancer", "Lancer", "Lancer", "Lancer", "Lancer", "Lancer", "Lancer", "Lancer", "Lancer", "Lancer"
     ));
     private double saldo;
+    private double ficha;
+    private double valorAposta;
 
-    public CacaNiquel(int numeroJogadores, boolean estadoDoJogo) {
+    public CacaNiquel(int numeroJogadores, boolean estadoDoJogo, double ficha) {
         super(numeroJogadores, estadoDoJogo);
+        this.ficha = ficha;
     }
 
-    public void sortearSimbolos(double aposta) {
+    public void sortearSimbolos() {
         Collections.shuffle(simbolos);
         String simbolo1 = simbolos.get(0);
         String simbolo2 = simbolos.get(1);
@@ -83,7 +88,66 @@ public class CacaNiquel extends Jogo {
         }
     }
 
-    //FAZER LAÇO DE ITERAÇÃO EM RELAÇÃO A REPETIÇÕES NA OPERAÇÃO DE RODAR O CAÇA NÍQUEL
+    //FAZER A VERIFICAÇÃO DE SALDO NO MAIN COM UM MÉTODO DO UTILS
+    public void jogar(Scanner leitor) throws ValorInvalidoException {
+        iniciarJogo();
+
+        try {
+            while (super.getEstado()) {
+                System.out.println("""
+                        Opções do jogo:
+                        
+                        [1] - Comprar fichas
+                        [2] - Jogar
+                        
+                        [0] - Voltar
+                        """);
+
+                //TRATAMENTO DE EXCESSÃO
+                switch (leitor.nextInt()) {
+                    case 1:
+                        System.out.println("\n" + "Cada ficha tem o valor de " + ficha + " crédito(s)");
+                        System.out.println("\n" + "Quantas fichas você deseja adiquirir?:");
+                        int compraFichas = leitor.nextInt();
+
+                        //TRATAMENTO DE EXCESSÃO
+                        if (compraFichas > 0) {
+                            System.out.println("Adicionando " + compraFichas + " fichas(s) ao seu saldo!");
+                            valorAposta = compraFichas * ficha;
+                            saldo = valorAposta;
+                        } else {
+                            throw new ValorInvalidoException("Opção inválida, tente novamente.");
+                        }
+                        break;
+
+                    case 2:
+                        System.out.println("Você deseja rodar quantas vezes?:");
+                        int quantasVezes = leitor.nextInt();
+                        double rodada = quantasVezes * ficha;
+
+                        if (rodada >= saldo) {
+                            System.out.println("-_-_-_- INICIANDO OS JOGOS! -_-_-_-");
+                            for (int i = 0; i < quantasVezes; i++) {
+                                sortearSimbolos();
+                                Thread.sleep(1500);
+                            }
+                        } else {
+                            System.out.println("Seu saldo acabou, ou não atende ao valor da(s) ficha(s)! :(");
+                        }
+                        break;
+
+                    case 0:
+                        finalizarJogo();
+                        break;
+
+                    default:
+                        throw new ValorInvalidoException("Opção inválida, tente novamente.");
+                }
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void finalizarJogo() {
@@ -97,9 +161,6 @@ public class CacaNiquel extends Jogo {
         System.out.println("Iniciando o caça níquel!");
     }
 
-    public double getSaldo() {
-        return saldo;
-    }
 
     public String imprimir (double valorApostado) {
         return "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n" +
@@ -107,8 +168,6 @@ public class CacaNiquel extends Jogo {
                 "Resultado: " + saldo + "\n" +
                 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n";
     }
-
-
 }
 
 
