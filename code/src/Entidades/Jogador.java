@@ -1,10 +1,12 @@
 package Entidades;
 
 import Jogos.Carta;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Jogador extends Usuario {
+public class Jogador extends Usuario implements Serializable {
     private double credito;
     private List<Carta> mao;
 

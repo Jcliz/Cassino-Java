@@ -1,6 +1,8 @@
 package Entidades;
 
-public abstract class Usuario {
+import java.io.Serializable;
+
+public abstract class Usuario implements Serializable {
     private String nome;
     private String dataNascimento;
 

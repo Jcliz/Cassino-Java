@@ -96,4 +96,12 @@ public class Bingo extends Jogo {
                 "Resultado do jogador 1 (em créditos): " + resultado + "\n" +
                 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n";
     }
+
+    public List<Cartela> getJogadores(){
+        return jogadores;
+    }
+
+    public Set<Integer> getNumerosSorteados(){
+        return numerosSorteados;
+    }
 }
