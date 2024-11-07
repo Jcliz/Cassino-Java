@@ -11,7 +11,11 @@ public abstract class Usuario implements Serializable {
         this.dataNascimento = dataNascimento;
     }
 
-    protected String getNome() {
+    public String getNome() {
         return nome;
+    }
+
+    public String getDataNascimento() {
+        return dataNascimento;
     }
 }

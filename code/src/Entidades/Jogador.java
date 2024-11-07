@@ -7,21 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Jogador extends Usuario implements Serializable {
-    private double credito;
+    private double creditos;
     private List<Carta> mao;
 
-    public Jogador(String nome, String dataNascimento, double credito) {
+    public Jogador(String nome, String dataNascimento, double creditosIniciais) {
         super(nome, dataNascimento);
-        this.credito = credito;
+        this.creditos = creditosIniciais;
         this.mao = new ArrayList<>();
-    }
-
-    public double getCredito() {
-        return credito;
-    }
-
-    public void setCredito(double credito) {
-        this.credito = credito;
     }
 
     public void receberCarta(Carta carta) {
@@ -32,7 +24,19 @@ public class Jogador extends Usuario implements Serializable {
         return mao;
     }
 
-    public String getNome() {
-        return super.getNome();
+    public double getCreditos() {
+        return creditos;
+    }
+
+    public void depositarCreditos(double valor) {
+        this.creditos += valor;
+    }
+
+    public boolean retirarCreditos(double valor) {
+        if (this.creditos >= valor) {
+            this.creditos -= valor;
+            return true;
+        }
+        return false;
     }
 }

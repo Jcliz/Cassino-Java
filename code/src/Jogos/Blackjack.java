@@ -2,19 +2,96 @@ package Jogos;
 
 import Entidades.Dealer;
 import Entidades.Jogador;
+import Utilidades.ValorInvalidoException;
+
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class Blackjack extends Jogo {
-    private Baralho baralho; // Baralho de cartas
-    private Jogador jogador; // Jogador
-    private Dealer dealer; // Dealer
+    private Baralho baralho;
+    private Jogador jogador;
+    private Dealer dealer;
+    private double resultado;
 
-    public Blackjack() {
-        super(2, false); // Chama o construtor da superclasse Jogo
-        baralho = new Baralho(); // Inicializa o baralho
-        jogador = new Jogador("Jogador", "01/01/1990", 1000.0); // Inicializa o jogador TESTE (tirar no codigo final)
-        dealer = new Dealer(); // Inicializa o dealer
+    public Blackjack(Baralho baralho, Jogador jogador, Dealer dealer) {
+        super(2, false);
+        this.baralho = baralho;
+        this.jogador = jogador;
+        this.dealer = dealer;
+    }
+
+    public double jogar(Scanner leitor, double valorAposta) throws ValorInvalidoException {
+        if (!apostar(leitor, valorAposta)) {
+            return 0;
+        }
+
+        iniciarJogo();
+        resultado = 0;
+
+        while (super.getEstado()) {
+            System.out.println("""
+                    +-+-+-+-+-+-+-+-+ BLACKJACK +-+-+-+-+-+-+-+-+
+                    Opções:
+
+                    [1] - Começar o jogo
+
+                    [0] - Voltar ao início""");
+
+            try {
+                switch (leitor.nextInt()) {
+                    case 1:
+                        iniciarJogo();
+                        break;
+
+                    case 0:
+                        System.out.println("Voltando à página inicial....");
+                        finalizarJogo();
+                        break;
+
+                    default:
+                        throw new ValorInvalidoException("Opção inválida, tente novamente.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        finalizarJogo();
+        return verificarResultados(valorAposta);
+    }
+
+    private boolean apostar(Scanner leitor, double valorAposta) {
+        if (!jogador.retirarCreditos(valorAposta)) {
+            System.out.println("Créditos insuficientes para apostar.");
+            return false;
+        }
+        return true;
+    }
+
+    public double verificarResultados(double valorAposta) {
+        int pontuacaoJogador = calcularPontuacao(jogador.getMao());
+        int pontuacaoDealer = calcularPontuacao(dealer.getMao());
+
+        if (pontuacaoDealer > 21 || pontuacaoJogador > pontuacaoDealer) {
+            System.out.println("Jogador vence!");
+            resultado = valorAposta * 2;
+            jogador.depositarCreditos(resultado);
+        } else if (pontuacaoJogador < pontuacaoDealer) {
+            System.out.println("Dealer vence!");
+            resultado = 0;
+        } else {
+            System.out.println("Empate!");
+            resultado = valorAposta;
+            jogador.depositarCreditos(resultado);
+        }
+        return resultado;
+    }
+
+    public String imprimir(double valorApostado) {
+        return "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n" +
+                "Valor apostado: " + valorApostado + "\n" +
+                "Resultado (em créditos): " + resultado + "\n" +
+                "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n";
     }
 
     public void jogar() {
@@ -30,27 +107,31 @@ public class Blackjack extends Jogo {
         System.out.println("Cartas do jogador: " + jogador.getMao()); // Mostra as cartas do jogador
         System.out.println("Cartas do dealer: " + dealer.getMao().getFirst() + " e [carta oculta]"); // Mostra a primeira carta do dealer
 
-
-
         // Loop para as ações do jogador
         while (super.getEstado()) {
             System.out.println("Escolha uma ação: 1. Pedir carta  2. Parar");
-            int escolha = scanner.nextInt();
+            try {
+                int escolha = scanner.nextInt(); // Lê a escolha do jogador
 
-            if (escolha == 1) { // Se escolher pedir carta
-                jogador.receberCarta(baralho.distribuirCarta());
-                System.out.println("Cartas do jogador: " + jogador.getMao());
-                if (calcularPontuacao(jogador.getMao()) > 21) { // Se a pontuação do jogador estourar ＞﹏＜
-                    System.out.println("Você estourou! Dealer vence."); // Que cara ruim, perdeu para um bot
-                    return; // Sai do loop
+                if (escolha == 1) { // Se escolher pedir carta
+                    jogador.receberCarta(baralho.distribuirCarta()); // Distribui uma carta ao jogador
+                    System.out.println("Cartas do jogador: " + jogador.getMao()); // Mostra as cartas do jogador
+                    if (calcularPontuacao(jogador.getMao()) > 21) { // Se a pontuação do jogador estourar ＞﹏＜
+                        System.out.println("Você estourou! Dealer vence."); // Que cara ruim, perdeu para um bot
+                        return; // Sai do loop
+                    }
+                } else if (escolha == 2) { // Se escolher parar
+                    break; // Sai do loop
+                } else {
+                    throw new ValorInvalidoException("Escolha inválida."); // Lança exceção para escolha inválida
                 }
-            } else if (escolha == 2) { // Se escolher parar
-                break;
-            } else { // Da para usar tratamento de exceção aqui @João \^o^/ (nao sei como)
-                System.out.println("Escolha inválida.");
+            } catch (InputMismatchException e) { // Captura exceção para entrada inválida
+                System.out.println("Entrada inválida! Por favor, insira um número inteiro.");
+                scanner.next();
+            } catch (ValorInvalidoException e) { // Captura exceção para valor inválido
+                System.out.println(e.getMessage());
             }
         }
-
         // Ações do dealer
         while (calcularPontuacao(dealer.getMao()) < 17) { // Enquanto a pontuação do dealer for menor que 17
             dealer.receberCarta(baralho.distribuirCarta()); // O dealer recebe uma carta
@@ -79,14 +160,6 @@ public class Blackjack extends Jogo {
     public void finalizarJogo() {
         super.setEstado(false);
         System.out.println("Finalizando a jogatina no BlackJack. Obrigado pela preferência!");
-    }
-
-    @Override
-    public String imprimir(double valorApostado) { // Método para imprimir o valor apostado
-        return "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n" +
-                "Valor Apostado: " + valorApostado + "\n" +
-                "Jogador: " + jogador.getNome() + "\n" +
-                "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n"; // Retorna o valor apostado
     }
 
     private int calcularPontuacao(List<Carta> mao) { // Método para calcular a pontuação da mão
