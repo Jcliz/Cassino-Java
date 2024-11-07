@@ -1,5 +1,9 @@
 package Jogos;
 
+import Utilidades.ValorInvalidoException;
+
+import java.util.Scanner;
+
 public abstract class Jogo {
     private int numeroDeJogadores;
     private boolean estadoDoJogo; // true para em andamento, false para terminado
@@ -17,12 +21,14 @@ public abstract class Jogo {
 
     public abstract void finalizarJogo();
 
+    public abstract void jogar(Scanner leitor) throws ValorInvalidoException;
+
+    public abstract String imprimir(double valorApostado);
+
     public void adicionarJogador() {
         numeroDeJogadores++;
         System.out.println("Jogador adicionado. Total de jogadores: " + numeroDeJogadores);
     }
-
-    public abstract String imprimir(double valorApostado);
 
     public boolean getEstado () {
         return estadoDoJogo;
@@ -30,5 +36,13 @@ public abstract class Jogo {
 
     public void setEstado(boolean estadoDoJogo) {
         this.estadoDoJogo = estadoDoJogo;
+    }
+
+    public void sumNumeroDeJogadores() {
+        numeroDeJogadores++;
+    }
+
+    public int getNumeroJogadores() {
+        return numeroDeJogadores;
     }
 }

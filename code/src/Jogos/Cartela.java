@@ -1,9 +1,6 @@
 package Jogos;
 
-import java.util.Random;
-import java.util.Set;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.*;
 
 public class Cartela extends Bingo {
     protected String[][] cartela;
@@ -63,6 +60,7 @@ public class Cartela extends Bingo {
     }
 
     public boolean verificarCartelaCompleta(Set<Integer> numerosSorteados) {
+        imprimirCartela();
         for (String[] linha : cartela) {
             boolean linhaCompleta = true;
             for (String numero : linha) {

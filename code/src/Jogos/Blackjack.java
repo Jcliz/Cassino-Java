@@ -4,9 +4,7 @@ import Entidades.Dealer;
 import Entidades.Jogador;
 import Utilidades.ValorInvalidoException;
 
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Blackjack extends Jogo {
     private Baralho baralho;
@@ -14,78 +12,99 @@ public class Blackjack extends Jogo {
     private Dealer dealer;
     private double resultado;
 
-    public Blackjack(Baralho baralho, Jogador jogador, Dealer dealer) {
+    public Blackjack(Jogador jogador, Dealer dealer) {
         super(2, false);
-        this.baralho = baralho;
+
+        //EM REVISÃO
+
+//        ArrayList<Carta> cartas = new ArrayList<>(); // Inicializa a lista de cartas
+//        String[] naipes = {"Copas", "Espadas", "Ouros", "Paus"}; // Define os naipes das cartas
+//        String[] valores = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"}; // Define os valores das cartas
+//
+//        // Loop para criar todas as combinações de naipes e valores
+//        for (String naipe : naipes) { // Para cada naipe (começa com "Copas") que vai de 0 a 3 (4 naipes)
+//            for (String valor : valores) { // Para cada valor (começa com "A") que vai de 0 a 12 (13 valores)
+//                cartas.add(new Carta(naipe, valor)); // Adiciona uma nova carta à lista (começa com "A de Copas")
+//            }
+//        }
+//
+//        Collections.shuffle(cartas);// Embaralha as cartas
+
+        //this.baralho = new Baralho(cartas, null, dealer);
         this.jogador = jogador;
         this.dealer = dealer;
     }
 
-    public double jogar(Scanner leitor, double valorAposta) throws ValorInvalidoException {
-        if (!apostar(leitor, valorAposta)) {
-            return 0;
-        }
-
-        iniciarJogo();
-        resultado = 0;
-
-        while (super.getEstado()) {
-            System.out.println("""
-                    +-+-+-+-+-+-+-+-+ BLACKJACK +-+-+-+-+-+-+-+-+
-                    Opções:
-
-                    [1] - Começar o jogo
-
-                    [0] - Voltar ao início""");
-
-            try {
-                switch (leitor.nextInt()) {
-                    case 1:
-                        iniciarJogo();
-                        break;
-
-                    case 0:
-                        System.out.println("Voltando à página inicial....");
-                        finalizarJogo();
-                        break;
-
-                    default:
-                        throw new ValorInvalidoException("Opção inválida, tente novamente.");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-        finalizarJogo();
-        return verificarResultados(valorAposta);
+    public Blackjack(boolean estadoDeJogo) {
+        super(estadoDeJogo);
     }
 
-    private boolean apostar(Scanner leitor, double valorAposta) {
-        if (!jogador.retirarCreditos(valorAposta)) {
-            System.out.println("Créditos insuficientes para apostar.");
-            return false;
-        }
-        return true;
-    }
+    //EM REVISÃO
+//    public double jogar(Scanner leitor, double valorAposta) throws ValorInvalidoException {
+//        if (!apostar(leitor, valorAposta)) {
+//            return 0;
+//        }
+//
+//        iniciarJogo();
+//        resultado = 0;
+//
+//        while (super.getEstado()) {
+//            System.out.println("""
+//                    +-+-+-+-+-+-+-+-+ BLACKJACK +-+-+-+-+-+-+-+-+
+//                    Opções:
+//
+//                    [1] - Começar o jogo
+//
+//                    [0] - Voltar ao início""");
+//
+//            try {
+//                switch (leitor.nextInt()) {
+//                    case 1:
+//                        iniciarJogo();
+//                        break;
+//
+//                    case 0:
+//                        System.out.println("Voltando à página inicial....");
+//                        finalizarJogo();
+//                        break;
+//
+//                    default:
+//                        throw new ValorInvalidoException("Opção inválida, tente novamente.");
+//                }
+//            } catch (InputMismatchException e) {
+//                System.out.println(e.getMessage());
+//            }
+//        }
+//        finalizarJogo();
+//        return verificarResultados(valorAposta);
+//    }
+//
+//    private boolean apostar(Scanner leitor, double valorAposta) {
+//        if (!jogador.retirarCreditos(valorAposta)) {
+//            System.out.println("Créditos insuficientes para apostar.");
+//            return false;
+//        }
+//        return true;
+//    }
 
-    public double verificarResultados(double valorAposta) {
-        int pontuacaoJogador = calcularPontuacao(jogador.getMao());
-        int pontuacaoDealer = calcularPontuacao(dealer.getMao());
-
-        if (pontuacaoDealer > 21 || pontuacaoJogador > pontuacaoDealer) {
-            System.out.println("Jogador vence!");
-            resultado = valorAposta * 2;
-            jogador.depositarCreditos(resultado);
-        } else if (pontuacaoJogador < pontuacaoDealer) {
-            System.out.println("Dealer vence!");
-            resultado = 0;
-        } else {
-            System.out.println("Empate!");
-            resultado = valorAposta;
-            jogador.depositarCreditos(resultado);
-        }
-        return resultado;
-    }
+//    public double verificarResultados(double valorAposta) {
+//        int pontuacaoJogador = calcularPontuacao(jogador.getMao());
+//        int pontuacaoDealer = calcularPontuacao(dealer.getMao());
+//
+//        if (pontuacaoDealer > 21 || pontuacaoJogador > pontuacaoDealer) {
+//            System.out.println("Jogador vence!");
+//            resultado = valorAposta * 2;
+//            jogador.depositarCreditos(resultado);
+//        } else if (pontuacaoJogador < pontuacaoDealer) {
+//            System.out.println("Dealer vence!");
+//            resultado = 0;
+//        } else {
+//            System.out.println("Empate!");
+//            resultado = valorAposta;
+//            jogador.depositarCreditos(resultado);
+//        }
+//        return resultado;
+//    }
 
     public String imprimir(double valorApostado) {
         return "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n" +
@@ -94,8 +113,7 @@ public class Blackjack extends Jogo {
                 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n";
     }
 
-    public void jogar() {
-        Scanner scanner = new Scanner(System.in);
+    public void jogar(Scanner leitor) {
         iniciarJogo();
 
         // Distribui duas cartas para cada jogador
@@ -111,7 +129,7 @@ public class Blackjack extends Jogo {
         while (super.getEstado()) {
             System.out.println("Escolha uma ação: 1. Pedir carta  2. Parar");
             try {
-                int escolha = scanner.nextInt(); // Lê a escolha do jogador
+                int escolha = leitor.nextInt(); // Lê a escolha do jogador
 
                 if (escolha == 1) { // Se escolher pedir carta
                     jogador.receberCarta(baralho.distribuirCarta()); // Distribui uma carta ao jogador
@@ -127,7 +145,7 @@ public class Blackjack extends Jogo {
                 }
             } catch (InputMismatchException e) { // Captura exceção para entrada inválida
                 System.out.println("Entrada inválida! Por favor, insira um número inteiro.");
-                scanner.next();
+                leitor.next();
             } catch (ValorInvalidoException e) { // Captura exceção para valor inválido
                 System.out.println(e.getMessage());
             }
@@ -187,5 +205,9 @@ public class Blackjack extends Jogo {
         }
 
         return pontuacao; // Retorna a pontuação final
+    }
+
+    public void setJogador(Jogador jogador) {
+        this.jogador = jogador;
     }
 }

@@ -28,6 +28,10 @@ public class Jogador extends Usuario implements Serializable {
         return creditos;
     }
 
+    public void setCreditos(double creditos) {
+        this.creditos = creditos;
+    }
+
     public void depositarCreditos(double valor) {
         this.creditos += valor;
     }

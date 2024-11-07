@@ -18,7 +18,7 @@ public class Roleta extends Jogo {
         super(numeroJogadores, estadoDoJogo);
     }
 
-    public double jogar(Scanner leitor, double valorAposta) throws ValorInvalidoException {
+    public void jogar(Scanner leitor) throws ValorInvalidoException {
         Random r = new Random();
         iniciarJogo();
         //Inicia a variável que recebe o valor de resultado para cada sessão de jogatina em 0
@@ -26,11 +26,12 @@ public class Roleta extends Jogo {
 
         while (super.getEstado()) {
             System.out.println("""
-                    +-+-+-+-+-+-+-+-+ ROLETA +-+-+-+-+-+-+-+-+
+                    -_-_-_-_-_-_-_-_-_- R O L E T A -_-_-_-_-_-_-_-_-_-
                     Opções:
-                    
-                    [1] - Começar o jogo
-                    
+
+                    [1] - Opções de aposta
+                    [2] - Começar o jogo
+
                     [0] - Voltar ao início""");
 
             sortearNumeros(r);
@@ -79,7 +80,6 @@ public class Roleta extends Jogo {
             }
         }
         finalizarJogo();
-        return verificarResultados(valorAposta);
     }
 
     public void verificarValorValidoPar(int tentativa) throws ValorInvalidoException {

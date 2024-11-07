@@ -1,5 +1,7 @@
 package Jogos;
 
+import Utilidades.ValorInvalidoException;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -35,12 +37,12 @@ public class Bingo extends Jogo {
         return cartela.verificarCartelaCompleta(numerosSorteados);
     }
 
-    public void adicionarJogador(Cartela cartela) {
+    public void adicionarJogadorBingo(Cartela cartela) {
         jogadores.add(cartela);
         super.adicionarJogador();
     }
 
-    public void jogar(Scanner scanner) {
+    public void jogar(Scanner scanner) throws ValorInvalidoException {
         iniciarJogo();
         while (super.getEstado()) {
             System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -66,8 +68,6 @@ public class Bingo extends Jogo {
                         cartela.imprimirCartela();
                         finalizarJogo();
                         break;
-                    } else {
-                        cartela.setResultado(0);
                     }
                 }
             } else {
