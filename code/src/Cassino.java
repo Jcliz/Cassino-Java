@@ -58,12 +58,11 @@ public class Cassino {
             Jogador j = Serializacao.carregarJogador();
             System.out.println(j);
 
-            Dealer dealer = new Dealer();
-
             Jogo[] jogos = new Jogo[]{
                     new CacaNiquel(1, false, 1),
                     new Roleta(1, false),
-                    new Blackjack(usuarioJogador, dealer)
+                    new Blackjack(1, false)
+
             };
             Bingo bingo = new Bingo(false);
 
@@ -145,7 +144,7 @@ public class Cassino {
                             break;
 
                         case 5:
-                            System.out.println("EM REVISÃO, SELECIONE OUTRA OPÇÃO.");
+                            jogos[2].jogar(leitor, usuarioJogador);
                             break;
 
                         case 6:

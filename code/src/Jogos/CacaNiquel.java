@@ -173,5 +173,3 @@ public class CacaNiquel extends Jogo {
                 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n";
     }
 }
-
-
