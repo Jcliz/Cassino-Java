@@ -1,5 +1,6 @@
 package Jogos;
 
+import Entidades.Jogador;
 import Utilidades.ValorInvalidoException;
 
 import java.util.Scanner;
@@ -21,9 +22,9 @@ public abstract class Jogo {
 
     public abstract void finalizarJogo();
 
-    public abstract void jogar(Scanner leitor) throws ValorInvalidoException;
+    public abstract void jogar(Scanner leitor, Jogador jogador) throws ValorInvalidoException;
 
-    public abstract String imprimir(double valorApostado);
+    public abstract String imprimir();
 
     public void adicionarJogador() {
         numeroDeJogadores++;

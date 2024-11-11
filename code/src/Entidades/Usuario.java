@@ -4,18 +4,18 @@ import java.io.Serializable;
 
 public abstract class Usuario implements Serializable {
     private String nome;
-    private String dataNascimento;
+    private int idade;
 
-    public Usuario(String nome, String dataNascimento) {
+    public Usuario(String nome, int idade) {
         this.nome = nome;
-        this.dataNascimento = dataNascimento;
+        this.idade = idade;
     }
 
     public String getNome() {
         return nome;
     }
 
-    public String getDataNascimento() {
-        return dataNascimento;
+    public int getIdade() {
+        return idade;
     }
 }

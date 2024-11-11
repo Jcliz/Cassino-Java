@@ -10,10 +10,19 @@ public class Jogador extends Usuario implements Serializable {
     private double creditos;
     private List<Carta> mao;
 
-    public Jogador(String nome, String dataNascimento, double creditosIniciais) {
-        super(nome, dataNascimento);
+    public Jogador(String nome, int idade, double creditosIniciais) {
+        super(nome, idade);
         this.creditos = creditosIniciais;
         this.mao = new ArrayList<>();
+    }
+
+    @Override
+    public String toString() {
+        return  "\n" + "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n" +
+                "Nome: " + super.getNome() + "\n" +
+                "Idade: " + super.getIdade() + "\n" +
+                "Carteira: " + this.creditos + " créditos" + "\n" +
+                "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n";
     }
 
     public void receberCarta(Carta carta) {
@@ -26,10 +35,6 @@ public class Jogador extends Usuario implements Serializable {
 
     public double getCreditos() {
         return creditos;
-    }
-
-    public void setCreditos(double creditos) {
-        this.creditos = creditos;
     }
 
     public void depositarCreditos(double valor) {

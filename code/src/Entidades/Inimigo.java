@@ -8,6 +8,6 @@ public class Inimigo extends Bot {
     @Override
     public void executarAcao() {
         // Implementar lógica do bot para jogar contra o jogador
-        System.out.println("Package_Entidade.Inimigo está jogando.");
+        System.out.println("O inimigo está jogando.");
     }
 }

@@ -19,7 +19,7 @@ public class Carta extends Baralho {
     }
 
     @Override
-    public String imprimir(double valorApostado) {
+    public String imprimir() {
         return "Carta: " + valor + " de " + naipe; // Retorna a carta no formato "Valor de Naipe" (ex: "A de Copas")
     }
 }

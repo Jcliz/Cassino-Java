@@ -39,6 +39,9 @@ public class Blackjack extends Jogo {
         super(estadoDeJogo);
     }
 
+    @Override
+    public void jogar(Scanner leitor, Jogador jogador) throws ValorInvalidoException {}
+
     //EM REVISÃO
 //    public double jogar(Scanner leitor, double valorAposta) throws ValorInvalidoException {
 //        if (!apostar(leitor, valorAposta)) {
@@ -106,9 +109,9 @@ public class Blackjack extends Jogo {
 //        return resultado;
 //    }
 
-    public String imprimir(double valorApostado) {
+    public String imprimir() {
         return "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n" +
-                "Valor apostado: " + valorApostado + "\n" +
+                "Valor apostado: " + jogador + "\n" +
                 "Resultado (em créditos): " + resultado + "\n" +
                 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n";
     }

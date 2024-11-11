@@ -1,5 +1,6 @@
 package Jogos;
 
+import Entidades.Jogador;
 import Utilidades.ValorInvalidoException;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class Bingo extends Jogo {
     private Set<Integer> numerosSorteados;
     private List<Cartela> jogadores;
     private double resultado;
+    private double aposta;
 
     public Bingo(boolean estadoJogo) {
         super(estadoJogo);
@@ -42,7 +44,7 @@ public class Bingo extends Jogo {
         super.adicionarJogador();
     }
 
-    public void jogar(Scanner scanner) throws ValorInvalidoException {
+    public void jogar(Scanner scanner, Jogador jogador) throws ValorInvalidoException {
         iniciarJogo();
         while (super.getEstado()) {
             System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -60,7 +62,7 @@ public class Bingo extends Jogo {
 
                     if (verificarVencedor(cartela)) {
                         if (i == 0) {
-                            this.resultado = cartela.getResultado();
+                            this.resultado += cartela.getResultado();
                         }
 
                         System.out.println(cartela.getNome() + " venceu!");
@@ -88,9 +90,10 @@ public class Bingo extends Jogo {
         System.out.println("Bingo iniciado, preparem as suas cartelas!");
     }
 
-    public String imprimir (double valorApostado) {
+    @Override
+    public String imprimir () {
         return "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n" +
-                "Valor Apostado: " + valorApostado + "\n" +
+                "Valor Apostado: " + aposta + "\n" +
                 "Jogadores: " + jogadores + "\n" +
                 "Numeros sorteados: " + numerosSorteados + "\n" +
                 "Resultado do jogador 1 (em créditos): " + resultado + "\n" +
@@ -103,5 +106,9 @@ public class Bingo extends Jogo {
 
     public Set<Integer> getNumerosSorteados(){
         return numerosSorteados;
+    }
+
+    public void setAposta(double aposta) {
+        this.aposta += aposta;
     }
 }

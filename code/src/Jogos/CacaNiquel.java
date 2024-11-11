@@ -1,5 +1,6 @@
 package Jogos;
 
+import Entidades.Jogador;
 import Utilidades.ValorInvalidoException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,6 +15,7 @@ public class CacaNiquel extends Jogo {
     private double saldo;
     private double ficha;
     private double valorAposta;
+    private double aposta;
 
     public CacaNiquel(int numeroJogadores, boolean estadoDoJogo, double ficha) {
         super(numeroJogadores, estadoDoJogo);
@@ -89,7 +91,7 @@ public class CacaNiquel extends Jogo {
     }
 
     //FAZER A VERIFICAÇÃO DE SALDO NO MAIN COM UM MÉTODO DO UTILS
-    public void jogar(Scanner leitor) throws ValorInvalidoException {
+    public void jogar(Scanner leitor, Jogador jogador) throws ValorInvalidoException {
         iniciarJogo();
 
         try {
@@ -109,6 +111,8 @@ public class CacaNiquel extends Jogo {
                         System.out.println("\n" + "Cada ficha tem o valor de " + ficha + " crédito(s)");
                         System.out.println("\n" + "Quantas fichas você deseja adiquirir?:");
                         int compraFichas = leitor.nextInt();
+                        double valorApostado = compraFichas * ficha;
+                        this.aposta += valorApostado;
 
                         //TRATAMENTO DE EXCESSÃO
                         if (compraFichas > 0) {
@@ -161,10 +165,10 @@ public class CacaNiquel extends Jogo {
         System.out.println("Iniciando o caça níquel!");
     }
 
-
-    public String imprimir (double valorApostado) {
+    @Override
+    public String imprimir () {
         return "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n" +
-                "Valor Apostado: " + valorApostado + "\n" +
+                "Valor Apostado: " + aposta + "\n" +
                 "Resultado: " + saldo + "\n" +
                 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n";
     }

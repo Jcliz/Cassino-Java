@@ -24,7 +24,7 @@ public class Baralho extends Blackjack {
     }
 
     @Override
-    public String imprimir(double valorApostado) {
+    public String imprimir() {
         return "Baralho com " + cartas.size() + " cartas restantes."; // Retorna a quantidade de cartas restantes no baralho
     }
 }

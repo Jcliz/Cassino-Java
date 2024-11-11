@@ -1,5 +1,8 @@
 package Jogos;
 
+import Entidades.Jogador;
+import Entidades.Usuario;
+import Utilidades.SaldoInvalidoException;
 import Utilidades.ValorInvalidoException;
 
 import java.util.InputMismatchException;
@@ -13,12 +16,14 @@ public class Roleta extends Jogo {
     private int aposta; //Número de aposta
     private int numeroRandom; //Número randomico
     private int corRandom; //Cor randomica
+    private double valorApostado;
+    private double apostaRodada;
 
     public Roleta (int numeroJogadores, boolean estadoDoJogo) {
         super(numeroJogadores, estadoDoJogo);
     }
 
-    public void jogar(Scanner leitor) throws ValorInvalidoException {
+    public void jogar(Scanner leitor, Jogador jogador) throws ValorInvalidoException {
         Random r = new Random();
         iniciarJogo();
         //Inicia a variável que recebe o valor de resultado para cada sessão de jogatina em 0
@@ -34,37 +39,91 @@ public class Roleta extends Jogo {
 
                     [0] - Voltar ao início""");
 
-            sortearNumeros(r);
             //Try Catch para a verificação de InputMismatch
             try {
                 switch (leitor.nextInt()) {
                     case 1:
                         System.out.print("""
                                 Opções para aposta:
+                                [1] - Valor da aposta
+                                [2] - Selecionar cores
+                                """);
+                        switch (leitor.nextInt()) {
+                            case 1:
+                                leitor.nextLine();
+                                try {
+                                    System.out.println("Qual é o valor que você deseja apostar?:");
+                                    double valor = leitor.nextDouble();
+                                    apostaRodada = valor;
+                                    this.valorApostado += valor;
+
+                                    if (valor <= jogador.getCreditos() || valor > 0) {
+                                        jogador.retirarCreditos(valor);
+                                        System.out.println("Aposta realizada com sucesso!" + "\n");
+                                        resultado += valor;
+
+                                    } else {
+                                        throw new SaldoInvalidoException("Saldo insuficiente, ou valor inválido.");
+                                    }
+                                } catch (InputMismatchException e) {
+                                    System.out.println("Entrada inválida! Por favor, insira um número.");
+                                    leitor.nextLine();
+                                    break;
+
+                                } catch (SaldoInvalidoException e) {
+                                    System.out.println(e.getMessage());
+                                    break;
+                                }
+                                break;
+
+                            case 2:
+                                System.out.println("""
+                                Opções:
                                 [1] - Vermelho
                                 [2] - Preto
                                 """);
-                        this.cor = leitor.nextInt();
+                                leitor.nextLine();
+                                cor = leitor.nextInt();
 
-                        int apostaTentativa; //Número apostado antes da verificação
+                                try {
+                                    int apostaTentativa; //Número apostado antes da verificação
 
-                        try {
-                            if (this.cor == 1) {
-                                this.corStr = "VERMELHO";
-                                System.out.println("Escolha um número par de 0 a 36:");
-                                apostaTentativa = leitor.nextInt();
-                                verificarValorValidoPar(apostaTentativa);
-                            } else if (this.cor == 2) {
-                                this.corStr = "PRETO";
-                                System.out.println("Escolha um número ímpar de 0 a 36:");
-                                apostaTentativa = leitor.nextInt();
-                                verificarValorValidoImpar(apostaTentativa);
-                            } else {
-                                throw new ValorInvalidoException("Opção inválida! Tente novamente!");
-                            }
-                        } catch (InputMismatchException e) {
-                            System.out.println("Entrada inválida! Por favor, insira um número inteiro.");
+                                    if (this.cor == 1) {
+                                        this.corStr = "VERMELHO";
+                                        System.out.println("Escolha um número par de 0 a 36:");
+                                        apostaTentativa = leitor.nextInt();
+                                        verificarValorValidoPar(apostaTentativa);
+
+                                    } else if (this.cor == 2) {
+                                        this.corStr = "PRETO";
+                                        System.out.println("Escolha um número ímpar de 0 a 36:");
+                                        apostaTentativa = leitor.nextInt();
+                                        verificarValorValidoImpar(apostaTentativa);
+
+                                    } else {
+                                        throw new ValorInvalidoException("Opção inválida! Tente novamente!");
+                                    }
+
+                                } catch (InputMismatchException e) {
+                                    System.out.println("Entrada inválida! Por favor, insira um número inteiro.");
+                                    leitor.nextLine();
+                                    break;
+
+                                } catch (ValorInvalidoException e) {
+                                    System.out.println(e.getMessage());
+                                    break;
+                                }
+                                break;
+
+                            default:
+                                System.out.println("Opção inválida!");
+                                break;
                         }
+                        break;
+
+                    case 2:
+                        sortearNumeros(r);
+                        this.resultado += verificarResultados(apostaRodada);
                         break;
 
                     case 0:
@@ -76,7 +135,8 @@ public class Roleta extends Jogo {
                         throw new ValorInvalidoException("Opção inválida, tente novamente.");
                 }
             } catch (InputMismatchException e) {
-                System.out.println(e.getMessage());
+                System.out.println("Entrada inválida! Por favor, insira um número inteiro." + "\n");
+                leitor.nextLine();
             }
         }
         finalizarJogo();
@@ -87,7 +147,7 @@ public class Roleta extends Jogo {
             System.out.println("Aposta válida!");
             this.aposta = tentativa;
         } else {
-            throw new ValorInvalidoException("Valor inválido! O número deve ser par.");
+            System.out.println("Valor inválido! O número deve ser par.");
         }
     }
     public void verificarValorValidoImpar(int tentativa) throws ValorInvalidoException{
@@ -95,7 +155,7 @@ public class Roleta extends Jogo {
             System.out.println("Aposta válida!");
             this.aposta = tentativa;
         } else {
-            throw new ValorInvalidoException("Valor inválido! O número deve ser ímpar.");
+            System.out.println("Valor inválido! O número deve ser ímpar.");
         }
     }
 
@@ -129,20 +189,23 @@ public class Roleta extends Jogo {
         this.corRandom = r.nextInt(1) + 1;  // 1 == Vermelho;  2 == Preto;
     }
 
+    @Override
     public void finalizarJogo() {
         super.setEstado(false);
         System.out.println("Terminando sua jogada na roleta!");
     }
 
+    @Override
     public void iniciarJogo() {
         super.setEstado(true);
         System.out.println("Vamos começar o jogo! Boa sorte.");
     }
 
-    public String imprimir (double valorApostado) {
+    @Override
+    public String imprimir () {
         return "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n" +
                 "Valor apostado: " + valorApostado + "\n" +
-                "Número e cor apostados: " + aposta + ", " + corStr + "\n" +
+                "Último número e cor apostados: " + aposta + ", " + corStr + "\n" +
                 "Resultado (em créditos): " + resultado + "\n" +
                 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n";
     }
