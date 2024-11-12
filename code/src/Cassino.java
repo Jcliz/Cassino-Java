@@ -1,16 +1,6 @@
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import Entidades.*;
 import Jogos.*;
-import Utilidades.SaldoInvalidoException;
+import Utilidades.Utils;
 import Utilidades.ValorInvalidoException;
 
 import java.io.BufferedReader;
@@ -59,16 +49,16 @@ public class Cassino {
             System.out.println(j);
 
             Jogo[] jogos = new Jogo[]{
+                    new Bingo(false),
                     new CacaNiquel(1, false, 1),
                     new Roleta(1, false),
                     new Blackjack(1, false)
-
             };
-            Bingo bingo = new Bingo(false);
 
             boolean acesso = true;
 
-            System.out.println("Tudo pronto " + usuarioJogador.getNome() + "! Vamos para a diversão." + "\n");
+            System.out.println("Tudo pronto " + Utils.capitalize(usuarioJogador.getNome()) +
+                    "! Vamos para a diversão." + "\n");
             while (acesso) {
                 System.out.println("""
                         Opções:
@@ -78,7 +68,7 @@ public class Cassino {
                         [3] - Caça níquel
                         [4] - Roleta
                         [5] - BlackJack
-                        [6] - Imprimir resultados
+                        [6] - Impressões
                         
                         [0] - Fechar o programa
                         """);
@@ -98,60 +88,37 @@ public class Cassino {
                                     usuarioJogador.depositarCreditos(saldoDeposito);
 
                                     System.out.println("Créditos depositados!" + "\n" +
-                                            "Total: " + usuarioJogador.getCreditos() + "\n");
+                                            "Total: " + usuarioJogador.getCreditos() + " créditos" + "\n");
 
                                 } else {
-                                    throw new SaldoInvalidoException("Valor inválido, tente novamente.");
+                                    throw new ValorInvalidoException("Valor inválido, tente novamente.");
                                 }
-                            } catch (SaldoInvalidoException e) {
+                            } catch (ValorInvalidoException e) {
                                 System.out.println(e.getMessage());
                             }
                             break;
 
                         case 2:
-                            System.out.println("Quantos jogadores?: ");
-                            int numJogadores = leitor.nextInt();
-
-                            leitor.nextLine();
-
-                            for (int i = 1; i <= numJogadores; i++) {
-                                System.out.println("Nome do jogador " + i + ":");
-                                String nome = leitor.nextLine();
-
-                                System.out.println("Valor apostado pelo jogador " + i + ":");
-                                double aposta = leitor.nextDouble();
-                                if (i == 1) {
-                                    bingo.setAposta(aposta);
-                                }
-                                System.out.println("\n");
-                                leitor.nextLine();
-
-                                Cartela cartela = new Cartela(false, nome, aposta);
-
-                                bingo.adicionarJogadorBingo(cartela);
-                                cartela.imprimirCartela();
-                            }
-                            bingo.jogar(leitor, usuarioJogador);
-                            break;
-
-                        case 3:
-                            System.out.println("-_-_-_-_-_- C A Ç A  N Í Q U E I S -_-_-_-_-_-");
                             jogos[0].jogar(leitor, usuarioJogador);
                             break;
 
-                        case 4:
+                        case 3:
                             jogos[1].jogar(leitor, usuarioJogador);
                             break;
 
-                        case 5:
+                        case 4:
                             jogos[2].jogar(leitor, usuarioJogador);
+                            break;
+
+                        case 5:
+                            jogos[3].jogar(leitor, usuarioJogador);
                             break;
 
                         case 6:
                             System.out.println("""
                                     -_-_-_-_-_-_- I M P R E S S Ã O -_-_-_-_-_-_-
                                     
-                                    Selecione um dos jogos que você deseja imprimir os resultados:
+                                    Selecione uma opção de impressão:
                                     """);
 
                             boolean impressao = true;
@@ -164,6 +131,7 @@ public class Cassino {
                                         [2] - Caça níquel
                                         [3] - Roleta
                                         [4] - BlackJack
+                                        [5] - Créditos atuais
                                         
                                         [0] - Voltar
                                         """);
@@ -171,23 +139,27 @@ public class Cassino {
                                 try {
                                     switch (leitor.nextInt()) {
                                         case 1:
-                                            System.out.println(bingo.imprimir());
-                                            break;
-
-                                        case 2:
                                             System.out.println(jogos[0].imprimir());
                                             break;
 
-                                        case 3:
+                                        case 2:
                                             System.out.println(jogos[1].imprimir());
                                             break;
 
+                                        case 3:
+                                            System.out.println(jogos[2].imprimir());
+                                            break;
+
                                         case 4:
-                                            System.out.println("JOGO EM REVISÃO, TENTE NOVAMENTE MAIS TARDE.");
+                                            System.out.println(jogos[3].imprimir());
+                                            break;
+
+                                        case 5:
+                                            System.out.println(usuarioJogador);
                                             break;
 
                                         case 0:
-                                            System.out.println("Voltando à página principal.....");
+                                            System.out.println("Voltando à página principal....." + "\n");
                                             impressao = false;
                                             break;
 

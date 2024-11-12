@@ -93,7 +93,7 @@ public class CacaNiquel extends Jogo {
     //FAZER A VERIFICAÇÃO DE SALDO NO MAIN COM UM MÉTODO DO UTILS
     public void jogar(Scanner leitor, Jogador jogador) throws ValorInvalidoException {
         iniciarJogo();
-
+        System.out.println("-_-_-_-_-_- C A Ç A  N Í Q U E I S -_-_-_-_-_-" + "\n");
         try {
             while (super.getEstado()) {
                 System.out.println("""

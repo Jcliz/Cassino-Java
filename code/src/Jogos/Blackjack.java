@@ -17,12 +17,13 @@ public class Blackjack extends Jogo {
     }
 
     public void jogar(Scanner leitor, Jogador jogador) throws ValorInvalidoException {
-        Random r = new Random();
+        Random r = new Random(System.currentTimeMillis());
         resultado = 0;
+
+        System.out.println("-_-_-_-_-_-_-_-_-_- B L A C K J A C K -_-_-_-_-_-_-_-_-_-");
 
         while (true) {
             System.out.println("""
-                    -_-_-_-_-_-_-_-_-_- B L A C K J A C K -_-_-_-_-_-_-_-_-_-
                     Opções:
 
                     [1] - Apostar

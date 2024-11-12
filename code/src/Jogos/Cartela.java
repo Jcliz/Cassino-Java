@@ -16,7 +16,7 @@ public class Cartela extends Bingo {
 
     protected String[][] gerarCartela() {
         String[][] cartela = new String[5][5];
-        Random random = new Random();
+        Random random = new Random(System.currentTimeMillis());
 
         for (int i = 0; i < 5; i++) {
             Set<Integer> numerosGerados = new HashSet<>();
@@ -96,9 +96,5 @@ public class Cartela extends Bingo {
 
     public double getResultado() {
         return valor;
-    }
-
-    public void setResultado(double valor) {
-        this.valor = valor;
     }
 }

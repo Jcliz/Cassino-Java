@@ -26,11 +26,9 @@ public class Jogador extends Usuario implements Serializable {
         this.creditos += valor;
     }
 
-    public boolean retirarCreditos(double valor) {
+    public void retirarCreditos(double valor) {
         if (this.creditos >= valor) {
             this.creditos -= valor;
-            return true;
         }
-        return false;
     }
 }

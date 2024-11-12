@@ -24,7 +24,7 @@ public class Roleta extends Jogo {
     }
 
     public void jogar(Scanner leitor, Jogador jogador) throws ValorInvalidoException {
-        Random r = new Random();
+        Random r = new Random(System.currentTimeMillis());
         iniciarJogo();
         //Inicia a variável que recebe o valor de resultado para cada sessão de jogatina em 0
         resultado = 0;

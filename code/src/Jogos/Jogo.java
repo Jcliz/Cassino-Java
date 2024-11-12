@@ -46,4 +46,8 @@ public abstract class Jogo {
     public int getNumeroJogadores() {
         return numeroDeJogadores;
     }
+
+    public void setarJogadores() {
+        this.numeroDeJogadores = 0;
+    }
 }
