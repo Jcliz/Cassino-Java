@@ -7,6 +7,7 @@ public class Jogador extends Usuario implements Serializable {
 
     public Jogador(String nome, int idade, double creditosIniciais) {
         super(nome, idade);
+        this.creditos = creditosIniciais;
     }
 
     @Override
