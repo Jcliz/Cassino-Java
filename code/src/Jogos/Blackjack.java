@@ -1,6 +1,7 @@
 package Jogos;
 
 import Entidades.Jogador;
+import Utilidades.Utils;
 import Utilidades.ValorInvalidoException;
 
 import java.util.InputMismatchException;
@@ -19,13 +20,14 @@ public class Blackjack extends Jogo {
     public void jogar(Scanner leitor, Jogador jogador) throws ValorInvalidoException {
         Random r = new Random(System.currentTimeMillis());
         resultado = 0;
+        valorApostado = 0; //NENHUMA APOSTA FEITA
 
         System.out.println("-_-_-_-_-_-_-_-_-_- B L A C K J A C K -_-_-_-_-_-_-_-_-_-");
 
         while (true) {
             System.out.println("""
+                    
                     Opções:
-
                     [1] - Apostar
                     [2] - Jogar
 
@@ -37,24 +39,30 @@ public class Blackjack extends Jogo {
                         try {
                             System.out.println("Qual é o valor que você deseja apostar?:");
                             double valor = leitor.nextDouble();
-                            if (valor <= jogador.getCreditos() && valor > 0) {
+                            if (Utils.verificarSaldoAposta(valor, jogador)) {
                                 valorApostado = valor;
                                 System.out.println("Você apostou " + valorApostado + " créditos.");
+                                jogador.retirarCreditos(valorApostado);
                             } else {
                                 throw new ValorInvalidoException("Valor inválido, tente novamente.");
                             }
                         } catch (InputMismatchException e) {
                             System.out.println("Entrada inválida! Por favor, insira um número válido.");
-                            leitor.nextLine(); // Avança para a próxima linha para evitar loop infinito
+                            leitor.nextLine();
                         } catch (ValorInvalidoException e) {
                             System.out.println(e.getMessage());
                         }
                         break;
 
                     case 2:
-                        if (valorApostado <= 0) {
-                            throw new ValorInvalidoException("Você precisa fazer uma aposta antes de jogar.");
+                        try {
+                            if (valorApostado <= 0) {
+                                throw new ValorInvalidoException("Você precisa fazer uma aposta antes de jogar.");
+                            }
+                        } catch (ValorInvalidoException e) {
+                            System.out.println(e.getMessage());
                         }
+
                         iniciarJogo();
                         int jogadorPontos = calcularPontos(r); // Jogador recebe pontos
                         dealerPontos = calcularPontos(r); // Dealer recebe pontos
@@ -67,7 +75,9 @@ public class Blackjack extends Jogo {
                             System.out.println("""
                                     Deseja comprar mais uma carta?
                                     [1] - Sim
-                                    [2] - Não""");
+                                    [2] - Não
+                                    
+                                    """);
                             int escolha = leitor.nextInt();
                             if (escolha == 1) {
                                 jogadorPontos += calcularPontos(r, 1); // Jogador compra mais uma carta
@@ -87,8 +97,9 @@ public class Blackjack extends Jogo {
                             }
 
                             if (dealerPontos > 21 || jogadorPontos > dealerPontos) {
-                                System.out.println("Você venceu!");
+                                System.out.println("Você venceu! Valor da aposta dobrado!");
                                 resultado += valorApostado;
+                                resultado *= 2;
                             } else if (jogadorPontos == dealerPontos) {
                                 System.out.println("Empate!");
                             } else {
@@ -96,6 +107,7 @@ public class Blackjack extends Jogo {
                                 resultado -= valorApostado;
                             }
                         }
+                        jogador.depositarCreditos(resultado);
                         finalizarJogo();
                         break;
 
@@ -155,9 +167,10 @@ public class Blackjack extends Jogo {
 
     @Override
     public String imprimir() {
-        return "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n" +
+        double saldoFinal = Math.max(resultado, 0);
+        return "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n" +
                 "Valor apostado: " + valorApostado + "\n" +
-                "Resultado (em créditos): " + resultado + "\n" +
-                "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n";
+                "Resultado da ultima partida (em créditos): " + saldoFinal + "\n" +
+                "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n";
     }
 }

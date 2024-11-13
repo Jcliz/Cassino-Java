@@ -38,155 +38,160 @@ public class Cassino {
 
         try {
             System.out.println("Primeiramente, nos informe seu nome:");
-            String nomeUsuario = leitor.nextLine();
+            String nomeUsuario = Utils.capitalize(leitor.nextLine());
 
             System.out.println("Agora, a sua idade:");
             int idadeUsuario = leitor.nextInt();
 
-            Jogador usuarioJogador = new Jogador(nomeUsuario, idadeUsuario, 0);
-            Serializacao.salvarPessoa(usuarioJogador);
-            Jogador j = Serializacao.carregarJogador();
-            System.out.println(j);
+            if (idadeUsuario <= 18) {
+                System.out.println("\n" + "O acesso é liberado apenas para maiores de idade.");
+                System.exit(0);
+            } else {
+                Jogador usuarioJogador = new Jogador(nomeUsuario, idadeUsuario, 0);
+                Serializacao.salvarPessoa(usuarioJogador);
+                Jogador j = Serializacao.carregarJogador();
+                System.out.println(j);
 
-            Jogo[] jogos = new Jogo[]{
-                    new Bingo(false),
-                    new CacaNiquel(1, false, 1),
-                    new Roleta(1, false),
-                    new Blackjack(1, false)
-            };
+                Jogo[] jogos = new Jogo[]{
+                        new Bingo(false),
+                        new CacaNiquel(1, false, 1),
+                        new Roleta(1, false),
+                        new Blackjack(1, false)
+                };
 
-            boolean acesso = true;
+                boolean acesso = true;
 
-            System.out.println("Tudo pronto " + Utils.capitalize(usuarioJogador.getNome()) +
-                    "! Vamos para a diversão." + "\n");
-            while (acesso) {
-                System.out.println("""
-                        Opções:
-                        
-                        [1] - Depósito de créditos
-                        [2] - Bingo
-                        [3] - Caça níquel
-                        [4] - Roleta
-                        [5] - BlackJack
-                        [6] - Impressões
-                        
-                        [0] - Fechar o programa
-                        """);
-                try {
-                    switch (leitor.nextInt()) {
-                        case 1:
-                            System.out.println("""
-                                    -_-_-_-_-_- D E P Ó S I T O -_-_-_-_-_-
-                                    
-                                    Valor para o depósito:""");
-
-                            double saldoDeposito = leitor.nextDouble();
-
-                            try {
-                                if (saldoDeposito > 0) {
-                                    System.out.println("Realizando operação de depósito....");
-                                    usuarioJogador.depositarCreditos(saldoDeposito);
-
-                                    System.out.println("Créditos depositados!" + "\n" +
-                                            "Total: " + usuarioJogador.getCreditos() + " créditos" + "\n");
-
-                                } else {
-                                    throw new ValorInvalidoException("Valor inválido, tente novamente.");
-                                }
-                            } catch (ValorInvalidoException e) {
-                                System.out.println(e.getMessage());
-                            }
-                            break;
-
-                        case 2:
-                            jogos[0].jogar(leitor, usuarioJogador);
-                            break;
-
-                        case 3:
-                            jogos[1].jogar(leitor, usuarioJogador);
-                            break;
-
-                        case 4:
-                            jogos[2].jogar(leitor, usuarioJogador);
-                            break;
-
-                        case 5:
-                            jogos[3].jogar(leitor, usuarioJogador);
-                            break;
-
-                        case 6:
-                            System.out.println("""
-                                    -_-_-_-_-_-_- I M P R E S S Ã O -_-_-_-_-_-_-
-                                    
-                                    Selecione uma opção de impressão:
-                                    """);
-
-                            boolean impressao = true;
-
-                            while (impressao) {
+                System.out.println("Tudo pronto " + usuarioJogador.getNome() +
+                        "! Vamos para a diversão." + "\n");
+                while (acesso) {
+                    System.out.println("""
+                            Opções:
+                            
+                            [1] - Depósito de créditos
+                            [2] - Bingo
+                            [3] - Caça níquel
+                            [4] - Roleta
+                            [5] - BlackJack
+                            [6] - Impressões
+                            
+                            [0] - Fechar o programa
+                            """);
+                    try {
+                        switch (leitor.nextInt()) {
+                            case 1:
                                 System.out.println("""
-                                        Opções:
+                                        -_-_-_-_-_- D E P Ó S I T O -_-_-_-_-_-
                                         
-                                        [1] - Bingo
-                                        [2] - Caça níquel
-                                        [3] - Roleta
-                                        [4] - BlackJack
-                                        [5] - Créditos atuais
-                                        
-                                        [0] - Voltar
-                                        """);
-                                leitor.nextLine();
+                                        Valor para o depósito:""");
+
+                                double saldoDeposito = leitor.nextDouble();
+
                                 try {
-                                    switch (leitor.nextInt()) {
-                                        case 1:
-                                            System.out.println(jogos[0].imprimir());
-                                            break;
+                                    if (saldoDeposito > 0) {
+                                        System.out.println("Realizando operação de depósito....");
+                                        usuarioJogador.depositarCreditos(saldoDeposito);
 
-                                        case 2:
-                                            System.out.println(jogos[1].imprimir());
-                                            break;
+                                        System.out.println("Créditos depositados!" + "\n" +
+                                                "Total: " + usuarioJogador.getCreditos() + " créditos" + "\n");
 
-                                        case 3:
-                                            System.out.println(jogos[2].imprimir());
-                                            break;
-
-                                        case 4:
-                                            System.out.println(jogos[3].imprimir());
-                                            break;
-
-                                        case 5:
-                                            System.out.println(usuarioJogador);
-                                            break;
-
-                                        case 0:
-                                            System.out.println("Voltando à página principal....." + "\n");
-                                            impressao = false;
-                                            break;
-
-                                        default:
-                                            throw new ValorInvalidoException("Opção inválida, tente novamente.");
+                                    } else {
+                                        throw new ValorInvalidoException("Valor inválido, tente novamente.");
                                     }
                                 } catch (ValorInvalidoException e) {
                                     System.out.println(e.getMessage());
                                 }
-                            }
-                            break;
+                                break;
 
-                        case 0:
-                            System.out.println("Foi bom ter você conosco, até a próxima! :D");
-                            acesso = false;
-                            System.exit(0);
-                            break;
+                            case 2:
+                                jogos[0].jogar(leitor, usuarioJogador);
+                                break;
 
-                        default:
+                            case 3:
+                                jogos[1].jogar(leitor, usuarioJogador);
+                                break;
+
+                            case 4:
+                                jogos[2].jogar(leitor, usuarioJogador);
+                                break;
+
+                            case 5:
+                                jogos[3].jogar(leitor, usuarioJogador);
+                                break;
+
+                            case 6:
+                                System.out.println("""
+                                        -_-_-_-_-_-_- I M P R E S S Ã O -_-_-_-_-_-_-
+                                        
+                                        Selecione uma opção de impressão:
+                                        """);
+
+                                boolean impressao = true;
+
+                                while (impressao) {
+                                    System.out.println("""
+                                            Opções:
+                                            
+                                            [1] - Bingo
+                                            [2] - Caça níquel
+                                            [3] - Roleta
+                                            [4] - BlackJack
+                                            [5] - Créditos atuais
+                                            
+                                            [0] - Voltar
+                                            """);
+                                    leitor.nextLine();
+                                    try {
+                                        switch (leitor.nextInt()) {
+                                            case 1:
+                                                System.out.println(jogos[0].imprimir());
+                                                break;
+
+                                            case 2:
+                                                System.out.println(jogos[1].imprimir());
+                                                break;
+
+                                            case 3:
+                                                System.out.println(jogos[2].imprimir());
+                                                break;
+
+                                            case 4:
+                                                System.out.println(jogos[3].imprimir());
+                                                break;
+
+                                            case 5:
+                                                System.out.println(usuarioJogador);
+                                                break;
+
+                                            case 0:
+                                                System.out.println("Voltando à página principal....." + "\n");
+                                                impressao = false;
+                                                break;
+
+                                            default:
+                                                throw new ValorInvalidoException("Opção inválida, tente novamente.");
+                                        }
+                                    } catch (ValorInvalidoException e) {
+                                        System.out.println(e.getMessage());
+                                    }
+                                }
+                                break;
+
+                            case 0:
+                                System.out.println("Foi bom ter você conosco, até a próxima! :D");
+                                acesso = false;
+                                System.exit(0);
+                                break;
+
+                            default:
+                        }
+                    } catch (InputMismatchException e) {
+                        System.out.println("Entrada inválida! Por favor, insira um número inteiro." + "\n");
+                        leitor.nextLine();
                     }
-                } catch (InputMismatchException e) {
-                    System.out.println("Entrada inválida! Por favor, insira um número inteiro." + "\n");
-                    leitor.nextLine();
                 }
             }
         } catch (InputMismatchException e) {
-            System.out.println("Por favor, insira um valor válido.");
+            System.out.println("Digite um valor válido.");
         }
     }
 }

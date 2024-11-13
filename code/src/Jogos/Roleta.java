@@ -147,7 +147,7 @@ public class Roleta extends Jogo {
                                     "Cor: " + corStr + "\n");
                             this.resultado += verificarResultados(apostaRodada);
                         } else {
-                            System.out.println("Nenhuma aposta feita!");
+                            System.out.println("\n" + "Nenhuma aposta feita!");
                         }
                         break;
 
