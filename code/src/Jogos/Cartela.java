@@ -37,15 +37,24 @@ public class Cartela extends Bingo {
         return cartela;
     }
 
-    public void imprimirCartela() {
-        System.out.println("\n" + "Cartela de " + nome + ":");
+    public String imprimirCartela() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n" + "Cartela de " + nome + ":\n");
+
+        int contador = 0;
         for (String[] linha : cartela) {
             for (String numero : linha) {
-                System.out.print(numero + "\t");
+                sb.append(String.format("%-5s", numero)); // Formata para 5 espaços
+                contador++;
+
+                // Após 5 números, adiciona uma quebra de linha
+                if (contador % 5 == 0) {
+                    sb.append("\n");
+                }
             }
-            System.out.println();
         }
-        System.out.println();
+        sb.append("\n");
+        return sb.toString();
     }
 
     public void marcarNumero(int numero) {

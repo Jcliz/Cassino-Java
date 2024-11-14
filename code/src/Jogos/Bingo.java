@@ -4,12 +4,7 @@ import Entidades.Jogador;
 import Utilidades.Utils;
 import Utilidades.ValorInvalidoException;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class Bingo extends Jogo {
     private Set<Integer> numerosSorteados;
@@ -24,7 +19,7 @@ public class Bingo extends Jogo {
     }
 
     public void sortearNumero() {
-        Random random = new Random(System.currentTimeMillis());
+        Random random = new Random();
         int numero = random.nextInt(50) + 1;
         while (numerosSorteados.contains(numero)) {
             numero = random.nextInt(50) + 1;
@@ -151,5 +146,13 @@ public class Bingo extends Jogo {
 
     public void setResultadoPartida(double resultado) {
         this.resultado += resultado;
+    }
+
+    public List<Cartela> getJogadores() {
+        return new ArrayList<>();
+    }
+
+    public Set<Integer> getNumerosSorteados() {
+        return numerosSorteados;
     }
 }

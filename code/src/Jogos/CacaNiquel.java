@@ -21,73 +21,83 @@ public class CacaNiquel extends Jogo {
         this.ficha = ficha;
     }
 
-    public void sortearSimbolos() {
+    public String sortearSimbolos() {
+        // Embaralha os símbolos
         Collections.shuffle(simbolos);
+
+        // Pega os 3 primeiros símbolos sorteados
         String simbolo1 = simbolos.get(0);
         String simbolo2 = simbolos.get(1);
         String simbolo3 = simbolos.get(2);
+
+        // Imprime os símbolos no console
         System.out.println(simbolo1);
         System.out.println(simbolo2);
         System.out.println(simbolo3);
 
+        // Variável para o resultado do sorteio
+        String resultado = "Simbolos sorteados: " + simbolo1 + " - " + simbolo2 + " - " + simbolo3 + "\n";
+
+        // Verifica se os três símbolos são iguais
         if (simbolo1.equals(simbolo2) && simbolo2.equals(simbolo3)) {
+            // Caso todos os símbolos sejam iguais, aplica a lógica de premiação
             switch (simbolo1) {
                 case "Cereja":
-                    System.out.println("Você acertou 3 Cerejas!" + "\n");
+                    resultado += "Você acertou 3 Cerejas! +100";
                     saldo += 100;
                     break;
                 case "Limão":
-                    System.out.println("Você acertou 3 Limões!" + "\n");
+                    resultado += "Você acertou 3 Limões! +300";
                     saldo += 300;
                     break;
                 case "Uva":
-                    System.out.println("Você acertou 3 Uvas!" + "\n");
+                    resultado += "Você acertou 3 Uvas! +500";
                     saldo += 500;
                     break;
                 case "Melancia":
-                    System.out.println("Você acertou 3 Melancias!" + "\n");
+                    resultado += "Você acertou 3 Melancias! +700";
                     saldo += 700;
                     break;
                 case "Laranja":
-                    System.out.println("Você acertou 3 Laranjas!" + "\n");
+                    resultado += "Você acertou 3 Laranjas! +900";
                     saldo += 900;
                     break;
                 case "Sino":
-                    System.out.println("Você acertou 3 Sinhos!" + "\n");
+                    resultado += "Você acertou 3 Sinhos! +1200";
                     saldo += 1200;
                     break;
                 case "BAR":
-                    System.out.println("Você acertou 3 BARS!" + "\n");
+                    resultado += "Você acertou 3 BARS! +2000";
                     saldo += 2000;
                     break;
                 case "Ferradura":
-                    System.out.println("Você acertou 3 Ferraduras!" + "\n");
+                    resultado += "Você acertou 3 Ferraduras! +3000";
                     saldo += 3000;
                     break;
                 case "Estrela":
-                    System.out.println("Você acertou 3 Estrelas!" + "\n");
+                    resultado += "Você acertou 3 Estrelas! +4000";
                     saldo += 4000;
                     break;
                 case "Joker":
-                    System.out.println("Você acertou 3 Jokers!" + "\n");
+                    resultado += "Você acertou 3 Jokers! +10000";
                     saldo += 10000;
                     break;
                 case "Diamante":
-                    System.out.println("Você acertou 3 Diamantes!" + "\n");
+                    resultado += "Você acertou 3 Diamantes! +25000";
                     saldo += 25000;
                     break;
                 case "Lancer":
-                    System.out.println("Você acertou 3 Lancers!" + "\n");
+                    resultado += "Você acertou 3 Lancers! +100000";
                     saldo += 100000;
                     break;
                 default:
-                    System.out.println("Três símbolos iguais, mas não reconhecidos." + "\n");
+                    resultado += "Três símbolos iguais, mas não reconhecidos.";
             }
-
         } else {
-            System.out.println("A sequência não foi acertada. Boa sorte na próxima!" + "\n");
-            saldo -= ficha;
+            resultado += "A sequência não foi acertada. Boa sorte na próxima!";
         }
+
+        return resultado; // Retorna o resultado completo como String
     }
 
     //FAZER A VERIFICAÇÃO DE SALDO NO MAIN COM UM MÉTODO DO UTILS
