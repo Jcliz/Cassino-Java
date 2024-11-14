@@ -16,7 +16,7 @@ public class Cassino {
 
         //Leitor de TXT
         try {
-            FileReader arquivo = new FileReader("/Utilidades/dados.txt");
+            FileReader arquivo = new FileReader("code/src/Utilidades/dados.txt");
             BufferedReader buffer = new BufferedReader(arquivo);
             String str;
             while ((str = buffer.readLine()) != null) {
