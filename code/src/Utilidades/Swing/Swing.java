@@ -438,10 +438,11 @@ public class Swing {
         // Gerar a cartela uma vez e descontar os créditos
         if (cartela == null) {
             if (jogador.getCreditos() >= pontosPelaCartela) {
-                jogador.depositarCreditos(pontosPelaCartela);
+                jogador.retirarCreditos(pontosPelaCartela);
                 cartela = gerarCartela();  // Gera a cartela
                 JOptionPane.showMessageDialog(null,
                         "Cartela gerada com sucesso! Você pagou R$ " + pontosPelaCartela + " pela cartela.");
+                exibirCartela();
             } else {
                 JOptionPane.showMessageDialog(null,
                         "Você não tem créditos suficientes para gerar a cartela.");
@@ -456,7 +457,7 @@ public class Swing {
             Jogo de Bingo:
             [1] - Sortear um número
             [2] - Ver créditos após o jogo
-            [3] - Ver cartela
+
             [0] - Voltar ao menu
             """);
 
@@ -472,6 +473,7 @@ public class Swing {
                     if (verificarVitoria()) {
                         JOptionPane.showMessageDialog(null, "Parabéns! Você venceu o Bingo!");
                         jogador.depositarCreditos(100);
+                        cartelaFrame.setVisible(false);
                         continuarBingo = false;  // Encerra o loop do Bingo ao vencer
                     }
                     break;
@@ -479,12 +481,10 @@ public class Swing {
                     JOptionPane.showMessageDialog(null, "Créditos atuais: R$ " +
                             jogador.getCreditos());
                     break;
-                case "3":
-                    // Exibir a cartela
-                    exibirCartela();
-                    break;
+
                 case "0":
                     JOptionPane.showMessageDialog(null, "Voltando ao menu principal...");
+                    cartelaFrame.setVisible(false);
                     continuarBingo = false;  // Sai do loop de bingo e volta ao menu principal
                     break;
                 default:
