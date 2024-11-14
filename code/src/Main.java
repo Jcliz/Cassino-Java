@@ -47,6 +47,7 @@ public class Main {
             JOptionPane.showMessageDialog(null, "Idade ou créditos inválidos. Tente novamente.");
             return;  // Encerra o programa se os dados forem inválidos
         }
+        boolean opcao7Disponivel = nome.equalsIgnoreCase("Marina");
 
         // Exibir o menu de opções
         String menu = """
@@ -57,8 +58,14 @@ public class Main {
         [4] - Roleta
         [5] - BlackJack
         [6] - Impressões
-        [0] - Fechar o programa
-    """;
+        """;
+
+        // Adicionar a opção "Apostar o Lancer" se o nome do jogador for "Marina" ou "marina"
+        if (opcao7Disponivel) {
+            menu += "[7] - Apostar o Lancer\n";
+        }
+
+        menu += "[0] - Sair";
 
         String opcao;
         boolean continuar = true;
@@ -217,9 +224,22 @@ public class Main {
                         }
                     }
                     break;
+
+                case "7":
+                    if (opcao7Disponivel) {
+                        JOptionPane.showMessageDialog(null, "Você escolheu apostar o Lancer!");
+                        jogador.depositarCreditos(60000);  // Adiciona 60.000 créditos ao jogador
+                        JOptionPane.showMessageDialog(null, "Você recebeu R$ 60.000! Créditos totais: R$ " + jogador.getCreditos());
+                        opcao7Disponivel = false;  // Remove a opção 7 do menu
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Opção inválida. Tente novamente.");
+                    }
+                    break;
+
                 case "0":
                     continuar = false;  // Encerra o loop
                     break;
+
                 default:
                     JOptionPane.showMessageDialog(null, "Opção inválida. Tente novamente.");
                     break;
