@@ -33,7 +33,7 @@ public class Swing {
         btnCentralCreditos.addActionListener(e -> mostrarCentralDeCreditos(jogador));
 
         JButton btnBingo = new JButton("Bingo");
-        btnBingo.addActionListener(e -> iniciarBingo(jogador));
+        btnBingo.addActionListener(e -> mostrarBingo(jogador));
 
         JButton btnCacaNiquel = new JButton("Caça Níquel");
         btnCacaNiquel.addActionListener(e -> iniciarCacaNiquel(jogador));
@@ -63,13 +63,14 @@ public class Swing {
             mainFrame.add(btnApostarLancer);
         }
 
+        mainFrame.setLocationRelativeTo(null);
         mainFrame.add(btnSair);
         mainFrame.setVisible(true);
     }
 
     private static void mostrarCentralDeCreditos(Jogador jogador) {
         JFrame frameCentralCreditos = new JFrame("Central de Créditos");
-        frameCentralCreditos.setSize(300, 200);
+        frameCentralCreditos.setSize(400, 300);
         frameCentralCreditos.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frameCentralCreditos.setLayout(new GridLayout(0, 1));
 
@@ -86,6 +87,7 @@ public class Swing {
         frameCentralCreditos.add(btnDeposito);
         frameCentralCreditos.add(btnSaldo);
         frameCentralCreditos.add(btnVoltar);
+        frameCentralCreditos.setLocationRelativeTo(null);
 
         frameCentralCreditos.setVisible(true);
     }
@@ -120,6 +122,7 @@ public class Swing {
 
         // Tornar a janela visível
         janelaBlackjack.setVisible(true);
+        janelaBlackjack.setLocationRelativeTo(null);
     }
 
     // Função para apostar e iniciar o jogo
@@ -215,27 +218,35 @@ public class Swing {
 
         // Tornar a janela visível
         janelaRoleta.setVisible(true);
+        janelaRoleta.setLocationRelativeTo(null);
     }
 
     private static JButton getButton(Jogador jogador) {
         JButton iniciarButton = new JButton("Girar a Roleta");
         iniciarButton.addActionListener(_ -> {
-            // Solicitar ao jogador para escolher um número e uma cor antes de girar a roleta
+            // Solicitar ao jogador para escolher um número
             String numeroInput = JOptionPane.showInputDialog("Escolha um número (0 a 36):");
             int numeroEscolhido = Integer.parseInt(numeroInput);  // Converter para int
 
-            String corEscolhida = JOptionPane.showInputDialog("Escolha uma cor (Vermelho, Preto, Verde):");
+            // Criar o JComboBox para escolher a cor
+            String[] cores = {"Vermelho", "Preto", "Verde"};
+            JComboBox<String> corComboBox = new JComboBox<>(cores);
+
+            // Exibir a caixa de diálogo com o número e a caixa de seleção de cor
+            JPanel panel = new JPanel();
+            panel.add(new JLabel("Escolha uma cor:"));
+            panel.add(corComboBox);
+
+            // Mostrar o JOptionPane com a caixa de seleção
+            int opcao = JOptionPane.showConfirmDialog(null, panel, "Escolha uma cor", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
             // Validar as entradas do jogador
             if (numeroEscolhido < 0 || numeroEscolhido > 36) {
-                JOptionPane.showMessageDialog(null,
-                        "Número inválido! Escolha um número entre 0 e 36.");
-            } else if (!(corEscolhida.equalsIgnoreCase("Vermelho") ||
-                    corEscolhida.equalsIgnoreCase("Preto") ||
-                    corEscolhida.equalsIgnoreCase("Verde"))) {
-                JOptionPane.showMessageDialog(null,
-                        "Cor inválida! Escolha entre Vermelho, Preto ou Verde.");
-            } else {
+                JOptionPane.showMessageDialog(null, "Número inválido! Escolha um número entre 0 e 36.");
+            } else if (opcao == JOptionPane.OK_OPTION) {
+                // Obter a cor selecionada do JComboBox
+                String corEscolhida = (String) corComboBox.getSelectedItem();
+
                 // Chama o método girarRoleta com os parâmetros do jogador, número e cor escolhidos
                 girarRoleta(jogador, numeroEscolhido, corEscolhida);
             }
@@ -307,7 +318,7 @@ public class Swing {
 
     private static void iniciarCacaNiquel(Jogador jogador) {
         janelaCacaNiquel = new JFrame("Jogo de Caça-Níquel");
-        janelaCacaNiquel.setSize(300, 200);
+        janelaCacaNiquel.setSize(400, 300);
         janelaCacaNiquel.setLayout(new FlowLayout());
         janelaCacaNiquel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -318,6 +329,7 @@ public class Swing {
         btnRodar.addActionListener(e -> rodarMaquina(jogador));
 
         janelaCacaNiquel.add(btnRodar);
+        janelaCacaNiquel.setLocationRelativeTo(null);
         janelaCacaNiquel.setVisible(true);
     }
 
@@ -343,27 +355,27 @@ public class Swing {
         if (chance < 5) {  // 5% de chance
             resultado = "🍒 🍒 🍒";
             jogador.depositarCreditos(50);
-            JOptionPane.showMessageDialog(janelaCacaNiquel, "Parabéns! Você ganhou 50 créditos! Resultado: " + resultado);
+            JOptionPane.showMessageDialog(janelaCacaNiquel, "Parabéns! Você ganhou 50 créditos! \nResultado: " + resultado);
             tocarSomWinner();
         } else if (chance < 15) {  // 10% de chance
             resultado = "🍋 🍋 🍋";
             jogador.depositarCreditos(20);
-            JOptionPane.showMessageDialog(janelaCacaNiquel, "Você ganhou 20 créditos! Resultado: " + resultado);
+            JOptionPane.showMessageDialog(janelaCacaNiquel, "Você ganhou 20 créditos! \nResultado: " + resultado);
             tocarSomWinner();
         } else if (chance < 30) {  // 15% de chance
             resultado = "🍊 🍊 🍊";
             jogador.depositarCreditos(10);
-            JOptionPane.showMessageDialog(janelaCacaNiquel, "Você ganhou 10 créditos! Resultado: " + resultado);
+            JOptionPane.showMessageDialog(janelaCacaNiquel, "Você ganhou 10 créditos! \nResultado: " + resultado);
             tocarSomWinner();
         } else if (chance < 35) {  // 5% de chance para "🍇 🍇 🍇"
             resultado = "🍇 🍇 🍇";
             jogador.depositarCreditos(10);
-            JOptionPane.showMessageDialog(janelaCacaNiquel, "Você ganhou 10 créditos! Resultado: " + resultado);
+            JOptionPane.showMessageDialog(janelaCacaNiquel, "Você ganhou 10 créditos! \nResultado: " + resultado);
             tocarSomWinner();
         } else if (chance < 45) {  // 10% de chance
             resultado = "🍉 🍉 🍉";
             jogador.depositarCreditos(5);
-            JOptionPane.showMessageDialog(janelaCacaNiquel, "Você ganhou 5 créditos! Resultado: " + resultado);
+            JOptionPane.showMessageDialog(janelaCacaNiquel, "Você ganhou 5 créditos! \nResultado: " + resultado);
             tocarSomWinner();
         } else {
             // Gerar um resultado aleatório quando não há vitória
@@ -434,64 +446,73 @@ public class Swing {
 
     private static void iniciarBingo(Jogador jogador) {
         int pontosPelaCartela = 50;  // Exemplo de valor fixo para a cartela de Bingo
-
-        // Gerar a cartela uma vez e descontar os créditos
         if (cartela == null) {
             if (jogador.getCreditos() >= pontosPelaCartela) {
                 jogador.retirarCreditos(pontosPelaCartela);
                 cartela = gerarCartela();  // Gera a cartela
-                JOptionPane.showMessageDialog(null,
-                        "Cartela gerada com sucesso! Você pagou R$ " + pontosPelaCartela + " pela cartela.");
+                JOptionPane.showMessageDialog(null, "Cartela gerada com sucesso! Você pagou R$ " + pontosPelaCartela + " pela cartela.");
                 exibirCartela();
             } else {
-                JOptionPane.showMessageDialog(null,
-                        "Você não tem créditos suficientes para gerar a cartela.");
+                JOptionPane.showMessageDialog(null, "Você não tem créditos suficientes para gerar a cartela.");
                 return;  // Retorna ao menu caso não tenha créditos suficientes
             }
         }
+    }
 
-        // Loop de sorteios contínuos no Bingo
-        boolean continuarBingo = true;
-        while (continuarBingo) {
-            String opcaoBingo = JOptionPane.showInputDialog("""
-            Jogo de Bingo:
-            [1] - Sortear um número
-            [2] - Ver créditos após o jogo
+    private static void mostrarBingo(Jogador jogador) {
+        JFrame frameBingo = new JFrame("Jogo de Bingo");
+        frameBingo.setSize(400, 300);
+        frameBingo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frameBingo.setLayout(new GridLayout(0, 1)); // GridLayout para os botões
 
-            [0] - Voltar ao menu
-            """);
+        // Inicia o bingo (se necessário, ajusta aqui)
+        iniciarBingo(jogador);
 
-            switch (opcaoBingo) {
-                case "1":
-                    // Realizar sorteio
-                    int numeroSorteado = sortearNumero();
-                    JOptionPane.showMessageDialog(null, "Número sorteado: " + numeroSorteado);
-                    marcarNumeroNaCartela(numeroSorteado);
-                    exibirCartela();  // Exibe a cartela após marcar o número
+        // Botão para sortear um número
+        JButton btnSortear = new JButton("Sortear um número");
+        btnSortear.addActionListener(e -> {
+            int numeroSorteado = sortearNumero();
+            JOptionPane.showMessageDialog(frameBingo, "Número sorteado: " + numeroSorteado);
+            marcarNumeroNaCartela(numeroSorteado);
+            exibirCartela();  // Exibe a cartela após marcar o número
 
-                    // Verificar condição de vitória
-                    if (verificarVitoria()) {
-                        JOptionPane.showMessageDialog(null, "Parabéns! Você venceu o Bingo!");
-                        jogador.depositarCreditos(100);
-                        cartelaFrame.setVisible(false);
-                        continuarBingo = false;  // Encerra o loop do Bingo ao vencer
-                    }
-                    break;
-                case "2":
-                    JOptionPane.showMessageDialog(null, "Créditos atuais: R$ " +
-                            jogador.getCreditos());
-                    break;
-
-                case "0":
-                    JOptionPane.showMessageDialog(null, "Voltando ao menu principal...");
-                    cartelaFrame.setVisible(false);
-                    continuarBingo = false;  // Sai do loop de bingo e volta ao menu principal
-                    break;
-                default:
-                    JOptionPane.showMessageDialog(null, "Opção inválida. Tente novamente.");
-                    break;
+            // Verificar condição de vitória
+            if (verificarVitoria()) {
+                JOptionPane.showMessageDialog(frameBingo, "Parabéns! Você venceu o Bingo!");
+                jogador.depositarCreditos(100);
+                cartelaFrame.setVisible(false);  // Fecha a janela do bingo ao vencer
             }
-        }
+        });
+
+        // Botão para ver os créditos
+        JButton btnCreditos = new JButton("Ver créditos");
+        btnCreditos.addActionListener(e -> JOptionPane.showMessageDialog(frameBingo,
+                "Créditos atuais: R$ " + jogador.getCreditos()));
+
+        // Botão para voltar ao menu
+        JButton btnVoltar = new JButton("Voltar ao menu");
+        btnVoltar.addActionListener(e -> {
+            JOptionPane.showMessageDialog(frameBingo, "Voltando ao menu principal...");
+            frameBingo.setVisible(false);
+            cartelaFrame.setVisible(false);
+
+            // Fecha a janela de bingo e volta ao menu
+        });
+
+        // Adicionando os botões à janela
+        frameBingo.add(btnSortear);
+        frameBingo.add(btnCreditos);
+        frameBingo.add(btnVoltar);
+
+        // Garantir que os botões sejam exibidos corretamente
+        frameBingo.revalidate();
+        frameBingo.repaint();
+
+        // Definir a localização da janela
+        frameBingo.setLocationRelativeTo(null);
+
+        // Exibir a janela
+        frameBingo.setVisible(true);
     }
 
     // Método para gerar a cartela de Bingo
