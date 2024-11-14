@@ -1,3 +1,5 @@
+package Utilidades.Swing;
+
 import Entidades.Jogador;
 
 import javax.sound.sampled.*;
@@ -10,7 +12,7 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-public class Main {
+public class Swing {
     private static String[][] cartela;  // Cartela global para manter o estado
     private static JFrame cartelaFrame;
     private static JFrame janelaCacaNiquel;
@@ -19,240 +21,83 @@ public class Main {
     private static JLabel numeroLabel;
     private static final Set<Integer> numerosSorteados = new HashSet<>();
     private static final int MAX_NUMEROS = 50;// Referência para a janela da cartela
+    private static JFrame mainFrame;
 
-    public static void main(String[] args) {
-        // Solicitar informações para criar o jogador
-        String nome = JOptionPane.showInputDialog("Digite o nome do jogador:");
-        String idadeInput = JOptionPane.showInputDialog("Digite a idade do jogador:");
-        String creditosInput = JOptionPane.showInputDialog("Digite o valor inicial de créditos:");
+    public static void mostrarMenuPrincipal(Jogador jogador, boolean opcao7Disponivel) {
+        mainFrame = new JFrame("Cassino");
+        mainFrame.setSize(300, 400);
+        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainFrame.setLayout(new GridLayout(0, 1));
 
-        Jogador jogador;
+        JButton btnCentralCreditos = new JButton("Central de créditos");
+        btnCentralCreditos.addActionListener(e -> mostrarCentralDeCreditos(jogador));
 
-        try {
-            int idade = Integer.parseInt(idadeInput);  // Converte a idade para inteiro
-            double creditosIniciais = Double.parseDouble(creditosInput);  // Converte os créditos para double
+        JButton btnBingo = new JButton("Bingo");
+        btnBingo.addActionListener(e -> iniciarBingo(jogador));
 
-            // Verifica se a idade é válida para jogar
-            if (idade < 18) {
-                JOptionPane.showMessageDialog(null, "Jogadores com menos de 18 anos não podem jogar.");
-                return;  // Encerra o programa ou interrompe a execução
-            }
+        JButton btnCacaNiquel = new JButton("Caça Níquel");
+        btnCacaNiquel.addActionListener(e -> iniciarCacaNiquel(jogador));
 
-            // Cria o jogador com os dados fornecidos
-            jogador = new Jogador(nome, idade, creditosIniciais);
-            tocarSomEntrada();
-            JOptionPane.showMessageDialog(null, "Jogador " + jogador.getNome() + " criado com " + jogador.getCreditos() + " créditos.");
+        JButton btnRoleta = new JButton("Roleta");
+        btnRoleta.addActionListener(e -> iniciarRoleta(jogador));
 
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Idade ou créditos inválidos. Tente novamente.");
-            return;  // Encerra o programa se os dados forem inválidos
-        }
-        boolean opcao7Disponivel = nome.equalsIgnoreCase("Marina");
+        JButton btnBlackJack = new JButton("BlackJack");
+        btnBlackJack.addActionListener(e -> iniciarBlackjack(jogador));
 
-        // Exibir o menu de opções
-        String menu = """
-        Opções:
-        [1] - Central de créditos
-        [2] - Bingo
-        [3] - Caça níquel
-        [4] - Roleta
-        [5] - BlackJack
-        [6] - Impressões
-        """;
+        JButton btnSair = new JButton("Sair");
+        btnSair.addActionListener(e -> mainFrame.dispose());
 
-        // Adicionar a opção "Apostar o Lancer" se o nome do jogador for "Marina" ou "marina"
+        mainFrame.add(btnCentralCreditos);
+        mainFrame.add(btnBingo);
+        mainFrame.add(btnCacaNiquel);
+        mainFrame.add(btnRoleta);
+        mainFrame.add(btnBlackJack);
+
         if (opcao7Disponivel) {
-            menu += "[7] - Apostar o Lancer\n";
+            JButton btnApostarLancer = new JButton("Apostar o Lancer");
+            btnApostarLancer.addActionListener(e -> {
+                jogador.depositarCreditos(60000);
+                JOptionPane.showMessageDialog(mainFrame, "Você recebeu R$ 60.000! Créditos totais: R$ " + jogador.getCreditos());
+                btnApostarLancer.setEnabled(false); // Desabilitar o botão após uso
+            });
+            mainFrame.add(btnApostarLancer);
         }
 
-        menu += "[0] - Sair";
+        mainFrame.add(btnSair);
+        mainFrame.setVisible(true);
+    }
 
-        String opcao;
-        boolean continuar = true;
+    private static void mostrarCentralDeCreditos(Jogador jogador) {
+        JFrame frameCentralCreditos = new JFrame("Central de Créditos");
+        frameCentralCreditos.setSize(300, 200);
+        frameCentralCreditos.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frameCentralCreditos.setLayout(new GridLayout(0, 1));
 
-        while (continuar) {
-            opcao = JOptionPane.showInputDialog(menu);
+        JButton btnDeposito = new JButton("Depósito");
+        btnDeposito.addActionListener(e -> depositoDeCreditos(jogador));
 
-            switch (opcao) {
-                case "1":
-                    String submenu = """
-                Opções:
-                [1] - Depósito
-                [2] - Saldo
-                [0] - Voltar
-            """;
-                    String opcaoSubmenu = JOptionPane.showInputDialog(submenu);
+        JButton btnSaldo = new JButton("Saldo");
+        btnSaldo.addActionListener(e -> JOptionPane.showMessageDialog(frameCentralCreditos,
+                "Créditos atuais: R$ " + jogador.getCreditos()));
 
-                    switch (opcaoSubmenu) {
-                        case "1":
-                            depositoDeCreditos(jogador);
-                            break;
-                        case "2":
-                            JOptionPane.showMessageDialog(null, "Créditos atuais: R$ " + jogador.getCreditos());
-                            break;
-                        case "0":
-                            JOptionPane.showMessageDialog(null, "Voltando ao menu principal...");
-                            break;
-                        default:
-                            JOptionPane.showMessageDialog(null, "Opção inválida. Tente novamente.");
-                            break;
-                    }
-                    break;
-                case "3":
-                    boolean continuarCacaNiquel = true;
-                    while (continuarCacaNiquel) {
-                        String menuniquel = """
-                        Opções:
-                        [1] - Abrir caça níquel
-                        [2] - Saldo
-                        [3] - Rodar máquina
-                        [0] - Voltar
-                        """;
-                        String opcaoNiquel = JOptionPane.showInputDialog(menuniquel);
+        JButton btnVoltar = new JButton("Voltar");
+        btnVoltar.addActionListener(e -> frameCentralCreditos.dispose());
 
-                        switch (opcaoNiquel) {
-                            case "1":
-                                iniciarCacaNiquel(jogador);
-                                break;
-                            case "2":
-                                JOptionPane.showMessageDialog(null, "Créditos atuais: R$ " + jogador.getCreditos());
-                                break;
-                            case "3":
-                                rodarMaquina(jogador);
-                                break;
-                            case "0":
-                                JOptionPane.showMessageDialog(null, "Voltando ao menu principal...");
-                                continuarCacaNiquel = false;  // Sai do loop de caça níquel e volta ao menu principal
-                                break;
-                            default:
-                                JOptionPane.showMessageDialog(null, "Opção inválida. Tente novamente.");
-                                break;
-                        }
-                    }
-                    break;
-                case "2":
-                    iniciarBingo(jogador);
-                    break;
-                case "4":
-                    boolean continuarRoleta = true;
-                    while (continuarRoleta) {
-                        String menuroleta = """
-                        Opções:
-                        [1] - Abrir roleta
-                        [2] - Saldo
-                        [3] - Girar
-                        [0] - Voltar
-                        """;
-                        String opcaoNiquel = JOptionPane.showInputDialog(menuroleta);
+        frameCentralCreditos.add(btnDeposito);
+        frameCentralCreditos.add(btnSaldo);
+        frameCentralCreditos.add(btnVoltar);
 
-                        switch (opcaoNiquel) {
-                            case "1":
-                                iniciarRoleta(jogador);
-                                break;
-                            case "2":
-                                JOptionPane.showMessageDialog(null, "Créditos atuais: R$ " + jogador.getCreditos());
-                                break;
-                            case "3":
-                                String numeroInput = JOptionPane.showInputDialog("Escolha um número (0 a 36):");
-                                int numeroEscolhido = Integer.parseInt(numeroInput);  // Converter para int
-
-                                String[] cores = {"Vermelho", "Preto", "Verde"};
-                                JComboBox<String> corComboBox = new JComboBox<>(cores);
-
-                                int opcaoRoleta = JOptionPane.showConfirmDialog(null, corComboBox, "Escolha uma cor", JOptionPane.OK_CANCEL_OPTION);
-
-                                if (opcaoRoleta == JOptionPane.OK_OPTION) {
-                                    // Obtendo a cor escolhida
-                                    String corEscolhida = (String) corComboBox.getSelectedItem();
-
-                                    // Validar as entradas do jogador
-                                    if (numeroEscolhido < 0 || numeroEscolhido > 36) {
-                                        JOptionPane.showMessageDialog(null, "Número inválido! Escolha um número entre 0 e 36.");
-                                    } else {
-                                        assert corEscolhida != null;
-                                        if (!(corEscolhida.equalsIgnoreCase("Vermelho") || corEscolhida.equalsIgnoreCase("Preto") || corEscolhida.equalsIgnoreCase("Verde"))) {
-                                            JOptionPane.showMessageDialog(null, "Cor inválida! Escolha entre Vermelho, Preto ou Verde.");
-                                        } else {
-                                            // Chama o método girarRoleta com os parâmetros do jogador
-                                            girarRoleta(jogador, numeroEscolhido, corEscolhida);
-                                        }
-                                    }
-                                } else {
-                                    // Caso o jogador cancele a seleção, sai do processo
-                                    JOptionPane.showMessageDialog(null, "Seleção de cor cancelada.");
-                                }
-                                break;
-                            case "0":
-                                JOptionPane.showMessageDialog(null, "Voltando ao menu principal...");
-                                continuarRoleta = false;  // Sai do loop de caça níquel e volta ao menu principal
-                                break;
-                            default:
-                                JOptionPane.showMessageDialog(null, "Opção inválida. Tente novamente.");
-                                break;
-                        }
-                    }
-                    break;
-                case "5":
-                    boolean continuarBlackjack = true;
-                    while (continuarBlackjack) {
-                        String menublackjack = """
-                        Opções:
-                        [1] - Abrir BlackJack
-                        [2] - Apostar
-                        [3] - Saldo
-                        [0] - Voltar
-                        """;
-                        String opcaoBlackjack = JOptionPane.showInputDialog(menublackjack);
-
-                        switch (opcaoBlackjack) {
-                            case "1":
-                                iniciarBlackjack(jogador);
-                                break;
-                            case "3":
-                                JOptionPane.showMessageDialog(null, "Créditos atuais: R$ " + jogador.getCreditos());
-                                break;
-                            case "2":
-                                apostarEIniciarJogo(jogador);
-                                break;
-                            case "0":
-                                JOptionPane.showMessageDialog(null, "Voltando ao menu principal...");
-                                continuarBlackjack = false;  // Sai do loop de Blackjack e volta ao menu principal
-                                break;
-                            default:
-                                JOptionPane.showMessageDialog(null, "Opção inválida. Tente novamente.");
-                                break;
-                        }
-                    }
-                    break;
-
-                case "7":
-                    if (opcao7Disponivel) {
-                        JOptionPane.showMessageDialog(null, "Você escolheu apostar o Lancer!");
-                        jogador.depositarCreditos(60000);  // Adiciona 60.000 créditos ao jogador
-                        JOptionPane.showMessageDialog(null, "Você recebeu R$ 60.000! Créditos totais: R$ " + jogador.getCreditos());
-                        opcao7Disponivel = false;  // Remove a opção 7 do menu
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Opção inválida. Tente novamente.");
-                    }
-                    break;
-
-                case "0":
-                    continuar = false;  // Encerra o loop
-                    break;
-
-                default:
-                    JOptionPane.showMessageDialog(null, "Opção inválida. Tente novamente.");
-                    break;
-            }
-        }
+        frameCentralCreditos.setVisible(true);
     }
 
     public static void iniciarBlackjack(Jogador jogador) {
-        // Criando a janela de Blackjack
         JFrame janelaBlackjack = new JFrame("Jogo de Blackjack");
         janelaBlackjack.setSize(400, 300);
-        janelaBlackjack.setLayout(new BorderLayout());
-        janelaBlackjack.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        janelaBlackjack.setLayout(new FlowLayout());
+        janelaBlackjack.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);  // Fecha apenas a janela de Blackjack
+
+        JLabel lblStatus = new JLabel("Bem-vindo ao Blackjack!");
+        janelaBlackjack.add(lblStatus);
 
         // Exibição do saldo
         saldoLabel = new JLabel("Créditos: R$ " + jogador.getCreditos());
@@ -285,7 +130,8 @@ public class Main {
 
         // Validar a aposta
         if (aposta <= 0 || aposta > jogador.getCreditos()) {
-            JOptionPane.showMessageDialog(null, "Aposta inválida! Você não tem créditos suficientes.");
+            JOptionPane.showMessageDialog(null,
+                    "Aposta inválida! Você não tem créditos suficientes.");
         } else {
             // Chama o método jogarBlackjack com os parâmetros do jogador e aposta
             jogarBlackjack(jogador, aposta);
@@ -296,7 +142,8 @@ public class Main {
     public static void jogarBlackjack(Jogador jogador, int aposta) {
         // Verificar se o jogador tem créditos suficientes para jogar
         if (jogador.getCreditos() < aposta) {
-            JOptionPane.showMessageDialog(null, "Você não tem créditos suficientes para jogar!");
+            JOptionPane.showMessageDialog(null,
+                    "Você não tem créditos suficientes para jogar!");
             return;
         }
 
@@ -317,10 +164,12 @@ public class Main {
         int pontuacaoDealer = cartaDealer1 + cartaDealer2;
 
         // Atualizar o painel com as cartas e pontuação
-        resultadoLabel.setText("Cartas: " + cartaJogador1 + " e " + cartaJogador2 + " | Pontuação: " + pontuacaoJogador);
+        resultadoLabel.setText("Cartas: " + cartaJogador1 + " e " + cartaJogador2 +
+                " | Pontuação: " + pontuacaoJogador);
 
         // Mostrar as cartas do dealer
-        JOptionPane.showMessageDialog(null, "O dealer tem: " + cartaDealer1 + " e " + cartaDealer2);
+        JOptionPane.showMessageDialog(null, "O dealer tem: "
+                + cartaDealer1 + " e " + cartaDealer2);
 
         // Verificar se o jogador ultrapassou 21 (bust)
         String resultado;
@@ -379,9 +228,13 @@ public class Main {
 
             // Validar as entradas do jogador
             if (numeroEscolhido < 0 || numeroEscolhido > 36) {
-                JOptionPane.showMessageDialog(null, "Número inválido! Escolha um número entre 0 e 36.");
-            } else if (!(corEscolhida.equalsIgnoreCase("Vermelho") || corEscolhida.equalsIgnoreCase("Preto") || corEscolhida.equalsIgnoreCase("Verde"))) {
-                JOptionPane.showMessageDialog(null, "Cor inválida! Escolha entre Vermelho, Preto ou Verde.");
+                JOptionPane.showMessageDialog(null,
+                        "Número inválido! Escolha um número entre 0 e 36.");
+            } else if (!(corEscolhida.equalsIgnoreCase("Vermelho") ||
+                    corEscolhida.equalsIgnoreCase("Preto") ||
+                    corEscolhida.equalsIgnoreCase("Verde"))) {
+                JOptionPane.showMessageDialog(null,
+                        "Cor inválida! Escolha entre Vermelho, Preto ou Verde.");
             } else {
                 // Chama o método girarRoleta com os parâmetros do jogador, número e cor escolhidos
                 girarRoleta(jogador, numeroEscolhido, corEscolhida);
@@ -395,7 +248,8 @@ public class Main {
     public static void girarRoleta(Jogador jogador, int numeroEscolhido, String corEscolhida) {
         // Verificar se o jogador tem créditos suficientes
         if (jogador.getCreditos() < 10) {
-            JOptionPane.showMessageDialog(null, "Você não tem créditos suficientes para jogar!");
+            JOptionPane.showMessageDialog(null,
+                    "Você não tem créditos suficientes para jogar!");
             return;
         }
 
@@ -460,16 +314,16 @@ public class Main {
         saldoLabel = new JLabel("Créditos: R$ " + jogador.getCreditos());
         janelaCacaNiquel.add(saldoLabel);
 
-        // Criando um botão que abre um menu para o jogo de Caça-Níquel
+        JButton btnRodar = new JButton("Rodar Máquina");
+        btnRodar.addActionListener(e -> rodarMaquina(jogador));
 
-        // Tornar a janela visível
+        janelaCacaNiquel.add(btnRodar);
         janelaCacaNiquel.setVisible(true);
     }
 
     // Método para abrir o menu do Caça-Níquel
     // Função para rodar a máquina de Caça-Níquel
     private static void rodarMaquina(Jogador jogador) {
-        // Verificar se o jogador tem créditos suficientes para jogar
         if (jogador.getCreditos() < 10) {
             JOptionPane.showMessageDialog(janelaCacaNiquel, "Você não tem créditos suficientes para jogar!");
             return;
@@ -482,11 +336,10 @@ public class Main {
         String[] simbolos = {"🍒", "🍋", "🍊", "🍇", "🍉"};
         Random random = new Random();
 
-        // Gerar o resultado com maior controle de probabilidades
         int chance = random.nextInt(100);  // Gera um número de 0 a 99
-
         String resultado;
 
+        // Condições de vitória conforme solicitado
         if (chance < 5) {  // 5% de chance
             resultado = "🍒 🍒 🍒";
             jogador.depositarCreditos(50);
@@ -502,17 +355,16 @@ public class Main {
             jogador.depositarCreditos(10);
             JOptionPane.showMessageDialog(janelaCacaNiquel, "Você ganhou 10 créditos! Resultado: " + resultado);
             tocarSomWinner();
-        } else if (chance < 35) {  // 10% de chance para "🍇 🍇 🍇"
+        } else if (chance < 35) {  // 5% de chance para "🍇 🍇 🍇"
             resultado = "🍇 🍇 🍇";
             jogador.depositarCreditos(10);
             JOptionPane.showMessageDialog(janelaCacaNiquel, "Você ganhou 10 créditos! Resultado: " + resultado);
             tocarSomWinner();
-        } else if (chance < 45) {
+        } else if (chance < 45) {  // 10% de chance
             resultado = "🍉 🍉 🍉";
             jogador.depositarCreditos(5);
             JOptionPane.showMessageDialog(janelaCacaNiquel, "Você ganhou 5 créditos! Resultado: " + resultado);
             tocarSomWinner();
-
         } else {
             // Gerar um resultado aleatório quando não há vitória
             resultado = simbolos[random.nextInt(simbolos.length)] + " " +
@@ -524,14 +376,13 @@ public class Main {
 
         // Atualizar o saldo na tela
         saldoLabel.setText("Créditos: R$ " + jogador.getCreditos());
-
     }
 
     // Método para tocar o som
     private static void tocarSom() {
         try {
             // Remova as aspas extras no caminho do arquivo
-            File soundFile = new File("code/src/Jogada.wav"); // Substitua com o caminho correto
+            File soundFile = new File("code/src/Utilidades/Swing/Jogada.wav"); // Substitua com o caminho correto
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioStream);
@@ -541,10 +392,10 @@ public class Main {
         }
     }
 
-    private static void tocarSomEntrada() {
+    public static void tocarSomEntrada() {
         try {
             // Remova as aspas extras no caminho do arquivo
-            File soundFile = new File("code/src/Letsgo.wav"); // Substitua com o caminho correto
+            File soundFile = new File("code/src/Utilidades/Swing/Letsgo.wav"); // Substitua com o caminho correto
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioStream);
@@ -557,7 +408,7 @@ public class Main {
     private static void tocarSomWinner() {
         try {
             // Remova as aspas extras no caminho do arquivo
-            File soundFile = new File("code/src/Winner.wav"); // Substitua com o caminho correto
+            File soundFile = new File("code/src/Utilidades/Swing/Winner.wav"); // Substitua com o caminho correto
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioStream);
@@ -574,7 +425,8 @@ public class Main {
         try {
             double valor = Double.parseDouble(valorInput);
             jogador.depositarCreditos(valor);  // Atualiza os créditos do jogador
-            JOptionPane.showMessageDialog(null, "Depósito de R$ " + valor + " realizado com sucesso! Créditos totais: R$ " + jogador.getCreditos());
+            JOptionPane.showMessageDialog(null, "Depósito de R$ " +
+                    valor + " realizado com sucesso! Créditos totais: R$ " + jogador.getCreditos());
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Valor inválido. Tente novamente.");
         }
@@ -586,11 +438,13 @@ public class Main {
         // Gerar a cartela uma vez e descontar os créditos
         if (cartela == null) {
             if (jogador.getCreditos() >= pontosPelaCartela) {
-                jogador.depositarCreditos(-pontosPelaCartela);  // Deduz o valor da cartela
+                jogador.depositarCreditos(pontosPelaCartela);
                 cartela = gerarCartela();  // Gera a cartela
-                JOptionPane.showMessageDialog(null, "Cartela gerada com sucesso! Você pagou R$ " + pontosPelaCartela + " pela cartela.");
+                JOptionPane.showMessageDialog(null,
+                        "Cartela gerada com sucesso! Você pagou R$ " + pontosPelaCartela + " pela cartela.");
             } else {
-                JOptionPane.showMessageDialog(null, "Você não tem créditos suficientes para gerar a cartela.");
+                JOptionPane.showMessageDialog(null,
+                        "Você não tem créditos suficientes para gerar a cartela.");
                 return;  // Retorna ao menu caso não tenha créditos suficientes
             }
         }
@@ -604,7 +458,7 @@ public class Main {
             [2] - Ver créditos após o jogo
             [3] - Ver cartela
             [0] - Voltar ao menu
-        """);
+            """);
 
             switch (opcaoBingo) {
                 case "1":
@@ -617,11 +471,13 @@ public class Main {
                     // Verificar condição de vitória
                     if (verificarVitoria()) {
                         JOptionPane.showMessageDialog(null, "Parabéns! Você venceu o Bingo!");
+                        jogador.depositarCreditos(100);
                         continuarBingo = false;  // Encerra o loop do Bingo ao vencer
                     }
                     break;
                 case "2":
-                    JOptionPane.showMessageDialog(null, "Créditos atuais: R$ " + jogador.getCreditos());
+                    JOptionPane.showMessageDialog(null, "Créditos atuais: R$ " +
+                            jogador.getCreditos());
                     break;
                 case "3":
                     // Exibir a cartela
@@ -755,7 +611,8 @@ public class Main {
             }
         }
         if (diagonalPrincipalCompleta) {
-            JOptionPane.showMessageDialog(cartelaFrame, "Parabéns! Você completou a diagonal principal e ganhou!");
+            JOptionPane.showMessageDialog(cartelaFrame,
+                    "Parabéns! Você completou a diagonal principal e ganhou!");
             return true;
         }
 
@@ -768,12 +625,10 @@ public class Main {
             }
         }
         if (diagonalSecundariaCompleta) {
-            JOptionPane.showMessageDialog(cartelaFrame, "Parabéns! Você completou a diagonal secundária e ganhou!");
+            JOptionPane.showMessageDialog(cartelaFrame,
+                    "Parabéns! Você completou a diagonal secundária e ganhou!");
             return true;
         }
-
         return false;
     }
-
-
 }
