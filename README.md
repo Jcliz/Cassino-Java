@@ -13,7 +13,10 @@ Este repositório representa uma criação de um sistema de cassino em Java. :sl
 - Tratamento de exceção
 - Java Swing
 - Leitura de arquivos TXT
-- Serializer 
+- Serializer
+
+> [!NOTE]
+> Todos os código estão dentro da pasta code.
 
 ## Colaboradores:
 - @Jcliz
