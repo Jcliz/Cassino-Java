@@ -16,7 +16,7 @@ Este repositório representa uma criação de um sistema de cassino em Java. :sl
 - Serializer
 
 > [!NOTE]
-> Todos os código estão dentro da pasta code.
+> Todos os códigos estão dentro da pasta code.
 
 ## Colaboradores:
 - @Jcliz
