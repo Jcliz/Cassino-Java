@@ -18,14 +18,6 @@ Este repositório representa uma criação de um sistema de cassino em Java. :sl
 - Leitura de arquivos TXT
 - Serializer
 
-## Colaboradores:
-- @Jcliz
-- @gabrielbaczinski
-- @naat-taan
-
-## Pré requisitos
-- Java(TM) SE Devolepment Kit 22.0.2 ou maior.
-
 ## Orientações gerais:
 A execução do código acontece de duas maneiras:
 - Com interface gráfica em Swing
@@ -34,3 +26,11 @@ A execução do código acontece de duas maneiras:
 O arquivo CassinoUI é onde ocorre a execução com a interface gráfica, e em Cassino, a execução é feita no console. <br>
 > [!NOTE]
 >Para a criação da interface, alguns métodos dos jogos foram recriados na classe Swing, adaptados para essa API.
+
+## Colaboradores:
+- @Jcliz
+- @gabrielbaczinski
+- @naat-taan
+
+## Pré requisitos
+- Java(TM) SE Devolepment Kit 22.0.2 ou maior.
