@@ -5,6 +5,9 @@ Este repositório representa uma criação de um sistema de cassino em Java. :sl
 > [!IMPORTANT]
 >**Nenhum tipo de operação com dinheiro real é realizada neste repositório.**
 
+> [!NOTE]
+> Todos os códigos estão dentro da pasta code.
+
 ## Tecnologias e conceitos utilizados:
 - Encapsulamento
 - Herança
@@ -15,9 +18,6 @@ Este repositório representa uma criação de um sistema de cassino em Java. :sl
 - Leitura de arquivos TXT
 - Serializer
 
-> [!NOTE]
-> Todos os códigos estão dentro da pasta code.
-
 ## Colaboradores:
 - @Jcliz
 - @gabrielbaczinski
@@ -25,3 +25,12 @@ Este repositório representa uma criação de um sistema de cassino em Java. :sl
 
 ## Pré requisitos
 - Java(TM) SE Devolepment Kit 22.0.2 ou maior.
+
+## Orientações gerais:
+A execução do código acontece de duas maneiras:
+- Com interface gráfica em Swing
+- Sem interface gráfica
+
+O arquivo CassinoUI é onde ocorre a execução com a interface gráfica, e em Cassino, a execução é feita no console. <br>
+> [!NOTE]
+>Para a criação da interface, alguns métodos dos jogos foram recriados na classe Swing, adaptados para essa API.
