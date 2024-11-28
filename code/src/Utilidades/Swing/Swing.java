@@ -25,7 +25,7 @@ public class Swing {
 
     public static void mostrarMenuPrincipal(Jogador jogador, boolean opcao7Disponivel) {
         mainFrame = new JFrame("Cassino");
-        mainFrame.setSize(300, 400);
+        mainFrame.setSize(500, 600);
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setLayout(new GridLayout(0, 1));
 
@@ -33,7 +33,7 @@ public class Swing {
         btnCentralCreditos.addActionListener(e -> mostrarCentralDeCreditos(jogador));
 
         JButton btnBingo = new JButton("Bingo");
-        btnBingo.addActionListener(e -> mostrarBingo(jogador));
+        btnBingo.addActionListener(e -> iniciarBingo(jogador));
 
         JButton btnCacaNiquel = new JButton("Caça Níquel");
         btnCacaNiquel.addActionListener(e -> iniciarCacaNiquel(jogador));
@@ -238,11 +238,13 @@ public class Swing {
             panel.add(corComboBox);
 
             // Mostrar o JOptionPane com a caixa de seleção
-            int opcao = JOptionPane.showConfirmDialog(null, panel, "Escolha uma cor", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            int opcao = JOptionPane.showConfirmDialog(null, panel, "Escolha uma cor",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
             // Validar as entradas do jogador
             if (numeroEscolhido < 0 || numeroEscolhido > 36) {
-                JOptionPane.showMessageDialog(null, "Número inválido! Escolha um número entre 0 e 36.");
+                JOptionPane.showMessageDialog(null,
+                        "Número inválido! Escolha um número entre 0 e 36.");
             } else if (opcao == JOptionPane.OK_OPTION) {
                 // Obter a cor selecionada do JComboBox
                 String corEscolhida = (String) corComboBox.getSelectedItem();
@@ -333,7 +335,6 @@ public class Swing {
         janelaCacaNiquel.setVisible(true);
     }
 
-    // Método para abrir o menu do Caça-Níquel
     // Função para rodar a máquina de Caça-Níquel
     private static void rodarMaquina(Jogador jogador) {
         if (jogador.getCreditos() < 10) {
@@ -452,9 +453,10 @@ public class Swing {
                 cartela = gerarCartela();  // Gera a cartela
                 JOptionPane.showMessageDialog(null, "Cartela gerada com sucesso! Você pagou R$ " + pontosPelaCartela + " pela cartela.");
                 exibirCartela();
+                mostrarBingo(jogador);
+
             } else {
                 JOptionPane.showMessageDialog(null, "Você não tem créditos suficientes para gerar a cartela.");
-                return;  // Retorna ao menu caso não tenha créditos suficientes
             }
         }
     }
@@ -464,9 +466,6 @@ public class Swing {
         frameBingo.setSize(400, 300);
         frameBingo.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frameBingo.setLayout(new GridLayout(0, 1)); // GridLayout para os botões
-
-        // Inicia o bingo (se necessário, ajusta aqui)
-        iniciarBingo(jogador);
 
         // Botão para sortear um número
         JButton btnSortear = new JButton("Sortear um número");

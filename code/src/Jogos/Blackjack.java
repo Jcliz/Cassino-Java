@@ -24,7 +24,8 @@ public class Blackjack extends Jogo {
 
         System.out.println("-_-_-_-_-_-_-_-_-_- B L A C K J A C K -_-_-_-_-_-_-_-_-_-");
 
-        while (true) {
+        boolean acessoBJ = true;
+        while (acessoBJ) {
             System.out.println("""
                     
                     Opções:
@@ -40,9 +41,9 @@ public class Blackjack extends Jogo {
                             System.out.println("Qual é o valor que você deseja apostar?:");
                             double valor = leitor.nextDouble();
                             if (Utils.verificarSaldoAposta(valor, jogador)) {
-                                valorApostado = valor;
-                                System.out.println("Você apostou " + valorApostado + " créditos.");
-                                jogador.retirarCreditos(valorApostado);
+                                valorApostado += valor;
+                                System.out.println("Você apostou " + valor + " créditos.");
+                                jogador.retirarCreditos(valor);
                             } else {
                                 throw new ValorInvalidoException("Valor inválido, tente novamente.");
                             }
@@ -58,57 +59,58 @@ public class Blackjack extends Jogo {
                         try {
                             if (valorApostado <= 0) {
                                 throw new ValorInvalidoException("Você precisa fazer uma aposta antes de jogar.");
-                            }
-                        } catch (ValorInvalidoException e) {
-                            System.out.println(e.getMessage());
-                        }
+                            } else {
+                                iniciarJogo();
+                                int jogadorPontos = calcularPontos(r); // Jogador recebe pontos
+                                dealerPontos = calcularPontos(r); // Dealer recebe pontos
 
-                        iniciarJogo();
-                        int jogadorPontos = calcularPontos(r); // Jogador recebe pontos
-                        dealerPontos = calcularPontos(r); // Dealer recebe pontos
+                                System.out.println("Seus pontos: " + jogadorPontos);
+                                System.out.println("Pontos do dealer: " + dealerPontos);
 
-                        System.out.println("Seus pontos: " + jogadorPontos);
-                        System.out.println("Pontos do dealer: " + dealerPontos);
-
-                        boolean continuar = true;
-                        while (continuar && jogadorPontos <= 21) {
-                            System.out.println("""
+                                boolean continuar = true;
+                                while (continuar && jogadorPontos <= 21) {
+                                    System.out.println("""
                                     Deseja comprar mais uma carta?
                                     [1] - Sim
                                     [2] - Não
                                     
                                     """);
-                            int escolha = leitor.nextInt();
-                            if (escolha == 1) {
-                                jogadorPontos += calcularPontos(r, 1); // Jogador compra mais uma carta
-                                System.out.println("Seus pontos: " + jogadorPontos);
-                            } else {
-                                continuar = false;
-                            }
-                        }
+                                    int escolha = leitor.nextInt();
+                                    if (escolha == 1) {
+                                        jogadorPontos += calcularPontos(r, 1); // Jogador compra mais uma carta
+                                        System.out.println("Seus pontos: " + jogadorPontos);
+                                    } else {
+                                        continuar = false;
+                                    }
+                                }
 
-                        if (jogadorPontos > 21) {
-                            System.out.println("Você estourou! Dealer vence.");
-                            resultado -= valorApostado;
-                        } else {
-                            while (dealerPontos < jogadorPontos && dealerPontos <= 21) {
-                                dealerPontos += calcularPontos(r, 1); // Dealer compra mais cartas
-                                System.out.println("Pontos do dealer: " + dealerPontos);
-                            }
+                                if (jogadorPontos > 21) {
+                                    System.out.println("Você estourou! Dealer vence.");
 
-                            if (dealerPontos > 21 || jogadorPontos > dealerPontos) {
-                                System.out.println("Você venceu! Valor da aposta dobrado!");
-                                resultado += valorApostado;
-                                resultado *= 2;
-                            } else if (jogadorPontos == dealerPontos) {
-                                System.out.println("Empate!");
-                            } else {
-                                System.out.println("Você perdeu!");
-                                resultado -= valorApostado;
+                                } else {
+                                    while (dealerPontos < jogadorPontos) {
+                                        dealerPontos += calcularPontos(r, 1); // Dealer compra mais cartas
+                                        System.out.println("Pontos do dealer: " + dealerPontos);
+                                    }
+
+                                    if (dealerPontos > 21) {
+                                        System.out.println("Você venceu! Valor da aposta dobrado!");
+                                        resultado = valorApostado;
+                                        resultado *= 2;
+                                    } else if (jogadorPontos == dealerPontos) {
+                                        System.out.println("Empate!");
+                                    } else {
+                                        System.out.println("Você perdeu!");
+                                    }
+                                }
+                                jogador.depositarCreditos(resultado);
+                                finalizarJogo();
+                                acessoBJ = false;
+                                break;
                             }
+                        } catch (ValorInvalidoException e) {
+                            System.out.println(e.getMessage());
                         }
-                        jogador.depositarCreditos(resultado);
-                        finalizarJogo();
                         break;
 
                     case 0:
@@ -169,7 +171,7 @@ public class Blackjack extends Jogo {
     public String imprimir() {
         double saldoFinal = Math.max(resultado, 0);
         return "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n" +
-                "Valor apostado: " + valorApostado + "\n" +
+                "Último valor apostado: " + valorApostado + "\n" +
                 "Resultado da ultima partida (em créditos): " + saldoFinal + "\n" +
                 "-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-" + "\n";
     }

@@ -30,12 +30,6 @@ public class Cassino {
             e.printStackTrace();
         }
 
-        System.out.println("""
-                -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-                      S E J A  -  B E M - V I N D O (a) !
-                -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-                """);
-
         try {
             System.out.println("Primeiramente, nos informe seu nome:");
             String nomeUsuario = Utils.capitalize(leitor.nextLine());
@@ -183,6 +177,8 @@ public class Cassino {
                                 break;
 
                             default:
+                                System.out.println("Opção inválida! Tente novamente." + "\n");
+                                break;
                         }
                     } catch (InputMismatchException e) {
                         System.out.println("Entrada inválida! Por favor, insira um número inteiro." + "\n");

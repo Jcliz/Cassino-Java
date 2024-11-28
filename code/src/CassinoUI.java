@@ -6,20 +6,20 @@ import javax.swing.*;
 
 public class CassinoUI {
     public static void main(String[] args) {
-        String nome = JOptionPane.showInputDialog("Digite o nome do jogador:");
-        String idadeInput = JOptionPane.showInputDialog("Digite a idade do jogador:");
-        String creditosInput = JOptionPane.showInputDialog("Digite o valor inicial de créditos:");
-
         Jogador jogador;
+        String nome = JOptionPane.showInputDialog("Digite o nome do jogador:");
         try {
+            String idadeInput = JOptionPane.showInputDialog("Digite a idade do jogador:");
             int idade = Integer.parseInt(idadeInput);
-            double creditosIniciais = Double.parseDouble(creditosInput);
 
             if (idade < 18) {
                 JOptionPane.showMessageDialog(null,
                         "Jogadores com menos de 18 anos não podem jogar.");
                 return;
             }
+
+            String creditosInput = JOptionPane.showInputDialog("Digite o valor inicial de créditos:");
+            double creditosIniciais = Double.parseDouble(creditosInput);
 
             jogador = new Jogador(nome, idade, creditosIniciais);
             JOptionPane.showMessageDialog(null, "Jogador " + jogador.getNome()

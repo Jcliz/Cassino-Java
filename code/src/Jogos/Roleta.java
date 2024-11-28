@@ -72,16 +72,32 @@ public class Roleta extends Jogo {
                                     int apostaTentativa; //Número apostado antes da verificação
 
                                     if (cor == 1) {
-                                        this.corStr = "VERMELHO";
                                         System.out.println("Escolha um número par de 0 a 36:");
                                         apostaTentativa = leitor.nextInt();
-                                        verificarValorPar(apostaTentativa);
+                                        if (verificarValorPar(apostaTentativa)) {
+                                            System.out.println("Valor par válido!");
+
+                                            double valor = Utils.apostarRoleta(jogador, leitor);
+                                            apostaRodada = valor;
+                                            valorApostado += valor;
+                                            resultado += valor;
+                                            this.corStr = "VERMELHO";
+                                        }
 
                                     } else if (cor == 2) {
-                                        this.corStr = "PRETO";
                                         System.out.println("Escolha um número ímpar de 0 a 36:");
                                         apostaTentativa = leitor.nextInt();
                                         verificarValorImpar(apostaTentativa);
+
+                                        if (verificarValorImpar(apostaTentativa)) {
+                                            System.out.println("Valor ímpar válido!");
+
+                                            double valor = Utils.apostarRoleta(jogador, leitor);
+                                            apostaRodada = valor;
+                                            valorApostado += valor;
+                                            resultado += valor;
+                                            this.corStr = "PRETO";
+                                        }
 
                                     } else if (cor == 0) {
                                         System.out.println("Voltando para a tela inicial.");
@@ -90,33 +106,9 @@ public class Roleta extends Jogo {
                                     } else {
                                         throw new ValorInvalidoException("Opção inválida! Tente novamente!");
                                     }
-
                                     leitor.nextLine();
 
-                                    try {
-                                        System.out.println("Qual é o valor que você deseja apostar?:");
-                                        double valor = leitor.nextDouble();
 
-                                        if (Utils.verificarSaldoAposta(valor, jogador)) {
-                                            apostaRodada = valor;
-                                            jogador.retirarCreditos(valor);
-                                            System.out.println("Aposta realizada com sucesso!" + "\n");
-                                            valorApostado += valor;
-                                            resultado += valor;
-
-                                        } else {
-                                            throw new SaldoInvalidoException("Saldo insuficiente, ou valor inválido.");
-                                        }
-                                    } catch (InputMismatchException e) {
-                                        System.out.println("Entrada inválida! Por favor, insira um número.");
-                                        leitor.nextLine();
-                                        break;
-
-                                    } catch (SaldoInvalidoException e) {
-                                        System.out.println(e.getMessage());
-                                        super.setEstado(false);
-                                        break;
-                                    }
                                 } catch (InputMismatchException e) {
                                     System.out.println("Entrada inválida! Por favor, insira um número inteiro.");
                                     leitor.nextLine();
@@ -166,31 +158,23 @@ public class Roleta extends Jogo {
         }
     }
 
-    public void verificarValorPar(int tentativa) throws ValorInvalidoException {
-        try {
-            if (tentativa % 2 == 0) {
-                System.out.println("Valor par válido!");
-                this.aposta = tentativa;
-            } else {
-                throw new ValorInvalidoException("Valor inválido!");
-            }
-        } catch (ValorInvalidoException e) {
-            System.out.println(e.getMessage());
-            super.setEstado(false);
+    public boolean verificarValorPar(int tentativa) throws ValorInvalidoException {
+        if (tentativa % 2 == 0) {
+            this.aposta = tentativa; // Define a aposta válida
+            return true;
+        } else {
+            super.setEstado(false); // Define o estado como falso antes de lançar a exceção
+            throw new ValorInvalidoException("Valor inválido!");
         }
     }
 
-    public void verificarValorImpar(int tentativa) throws ValorInvalidoException {
-        try {
-            if (tentativa % 3 == 0) {
-                System.out.println("Valor ímpar válido!");
-                this.aposta = tentativa;
-            } else {
-                throw new ValorInvalidoException("Valor inválido!");
-            }
-        } catch (ValorInvalidoException e) {
-            System.out.println(e.getMessage());
-            super.setEstado(false);
+    public boolean verificarValorImpar(int tentativa) throws ValorInvalidoException {
+        if (tentativa % 3 == 0 || ehPrimo(tentativa)) {
+            this.aposta = tentativa; // Define a aposta válida
+            return true;
+        } else {
+            super.setEstado(false); // Define o estado como falso antes de lançar a exceção
+            throw new ValorInvalidoException("Valor inválido!");
         }
     }
 

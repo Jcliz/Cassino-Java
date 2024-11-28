@@ -46,13 +46,12 @@ public class Bingo extends Jogo {
         this.numerosSorteados.clear();
 
         System.out.println("""
-                           -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_- B I N G O -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-                                 LEMBRE-SE QUE SE VOCÊ INTERROMPER O SORTEIO NO MEIO DA EXECUÇÃO,
-                              NÃO NOS RESPONSABILIZAREMOS PELO REEMBOLSO DOS SEUS CRÉDITOS APOSTADOS
-                           
-                           Primeiramente, nos informe a quantidade de jogadores que jogarão:""");
-        int numJogadores = scanner.nextInt();
+                       -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_- B I N G O -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
+                             LEMBRE-SE QUE SE VOCÊ INTERROMPER O SORTEIO NO MEIO DA EXECUÇÃO,
+                          NÃO NOS RESPONSABILIZAREMOS PELO REEMBOLSO DOS SEUS CRÉDITOS APOSTADOS
 
+                       Primeiramente, nos informe a quantidade de jogadores que jogarão:""");
+        int numJogadores = scanner.nextInt();
         scanner.nextLine();
 
         try {
@@ -72,13 +71,12 @@ public class Bingo extends Jogo {
                         setAposta(aposta);
                         Cartela cartela = new Cartela(false, nome, aposta);
                         adicionarJogadorBingo(cartela);
-                        cartela.imprimirCartela();
+                        System.out.println(cartela.imprimirCartela()); // Imprime a cartela
                     }
                 } else {
                     Cartela cartela = new Cartela(false, nome, aposta);
-
                     adicionarJogadorBingo(cartela);
-                    cartela.imprimirCartela();
+                    System.out.println(cartela.imprimirCartela()); // Imprime a cartela
                 }
             }
         } catch (ValorInvalidoException e) {
@@ -92,9 +90,14 @@ public class Bingo extends Jogo {
                 System.out.println("Sortear próximo número? (s/n)");
                 String resposta = scanner.nextLine();
                 if (resposta.equalsIgnoreCase("s")) {
-                    sortearNumero();
+                    sortearNumero(); // Sorteia o número e atualiza as cartelas
 
-                    //Não foi utilizado o for each, pois, a variável i será utilizada para verificação
+                    // Imprime todas as cartelas após o sorteio
+                    for (Cartela cartela : jogadores) {
+                        System.out.println(cartela.imprimirCartela()); // Imprime cada cartela
+                    }
+
+                    // Verifica se há vencedores
                     for (int i = 0; i < jogadores.size(); i++) {
                         Cartela cartela = jogadores.get(i);
 
@@ -105,8 +108,8 @@ public class Bingo extends Jogo {
                             }
 
                             System.out.println(cartela.getNome() + " venceu!");
-                            System.out.println("Valor ganho pelo jogador " + cartela.getNome() + ":" + cartela.getResultado());
-                            cartela.imprimirCartela();
+                            System.out.println("Valor ganho pelo jogador " + cartela.getNome() + ": " + cartela.getResultado());
+                            System.out.println(cartela.imprimirCartela()); // Imprime a cartela do vencedor
                             finalizarJogo();
                             break;
                         }
