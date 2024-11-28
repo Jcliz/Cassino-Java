@@ -17,6 +17,7 @@ Este repositório representa uma criação de um sistema de cassino em Java. :sl
 - Java Swing
 - Leitura de arquivos TXT
 - Serializer
+- Reprodução de arquivos wav
 
 ## Orientações gerais:
 A execução do código acontece de duas maneiras:
