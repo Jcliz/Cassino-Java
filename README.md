@@ -33,4 +33,4 @@ O arquivo CassinoUI é onde ocorre a execução com a interface gráfica, e em C
 - @naat-taan
 
 ## Pré requisitos
-- Java(TM) SE Devolepment Kit 22.0.2 ou maior.
+- Java 22.0.2 ou maior.
